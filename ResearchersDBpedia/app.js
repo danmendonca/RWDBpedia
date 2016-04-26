@@ -12,6 +12,7 @@ var users = require('./routes/users');
 //SPARQL config
 var request = require('request');
 var SparqlHttp = require('sparql-http-client');
+var SparqlQuery = require('./lib/SparqlQuery.js');
 // use the request module for all requests
 SparqlHttp.request = SparqlHttp.requestModuleRequest(request);
 // create an object instance for the endpoint 
@@ -35,62 +36,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
-
-
-//QueryPrototype class
-function Query() {
-    //this.prefixes = [];
-    //this.triples = [];
-    this.selects = [];
-    this.prefixString = "";
-    this.triplesString = "";
-    this.selectsString = "";
-    this.orderBy = "";
-    this.groupBy = "";
-    this.lastRemarks = "";
-}
-Query.prototype.addPrefix = function (prefNs, prefUrl) {
-    if (prefNs != null && prefUrl != null) {
-        var newPrefix = "PREFIX " + prefNs + ": <" + prefUrl + "> ";
-        //this.prefixes.push(newPrefix);
-        this.prefixString +=newPrefix;
-    }
-}
-Query.prototype.addTriple = function (subject, predicate, obj) {
-    if (subject != null && predicate != null && obj != null) {
-        var newTriple = subject + " " + predicate + " " + obj + " . ";
-        //this.triples.push(newTriple);
-        this.triplesString += newTriple;
-    }
-}
-Query.prototype.addOrder = function (order) {
-    if (order != null)
-        this.orderBy = "ORDER BY " + order;
-}
-Query.prototype.addSelect = function (select) {
-    if (select != null) {
-        //this.selects.push(select);
-        this.selects += select + " ";
-    }
-}
-Query.prototype.returnQuery = function () {
-    /*this.prefixes.forEach(function (entry) {
-        query = query.concat()
-    }, this);*/
-
-    /*this.selects.forEach(function (entry) {
-        query = query.concat(entry);
-    }, this);*/
-    var query = this.prefixString;
-    query += "SELECT DISTINCT " + this.selects; +" ";
-    query += "WHERE { " + this.triplesString + " } ";
-    if (this.lastRemarks != "")
-        query += this.lastRemarks;
-    return query;
-}
-
-
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -128,7 +73,7 @@ app.set('port', process.env.PORT || 3000);
 var server = app.listen(app.get('port'), function () {
     debug('Express server listening on port ' + server.address().port);
     
-    var q = new Query();
+    var q = new SparqlQuery();
     q.addPrefix('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#');
     q.addPrefix('ontology', 'http://dbpedia.org/ontology/');
     q.addTriple('?bookUri', 'rdf:type', 'ontology:Book');
