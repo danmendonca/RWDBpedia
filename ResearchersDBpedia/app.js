@@ -36,6 +36,62 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 
+
+//QueryPrototype class
+function Query() {
+    //this.prefixes = [];
+    //this.triples = [];
+    this.selects = [];
+    this.prefixString = "";
+    this.triplesString = "";
+    this.selectsString = "";
+    this.orderBy = "";
+    this.groupBy = "";
+    this.lastRemarks = "";
+}
+Query.prototype.addPrefix = function (prefNs, prefUrl) {
+    if (prefNs != null && prefUrl != null) {
+        var newPrefix = "PREFIX " + prefNs + ": <" + prefUrl + "> ";
+        //this.prefixes.push(newPrefix);
+        this.prefixString +=newPrefix;
+    }
+}
+Query.prototype.addTriple = function (subject, predicate, obj) {
+    if (subject != null && predicate != null && obj != null) {
+        var newTriple = subject + " " + predicate + " " + obj + " . ";
+        //this.triples.push(newTriple);
+        this.triplesString += newTriple;
+    }
+}
+Query.prototype.addOrder = function (order) {
+    if (order != null)
+        this.orderBy = "ORDER BY " + order;
+}
+Query.prototype.addSelect = function (select) {
+    if (select != null) {
+        //this.selects.push(select);
+        this.selects += select + " ";
+    }
+}
+Query.prototype.returnQuery = function () {
+    /*this.prefixes.forEach(function (entry) {
+        query = query.concat()
+    }, this);*/
+
+    /*this.selects.forEach(function (entry) {
+        query = query.concat(entry);
+    }, this);*/
+    var query = this.prefixString;
+    query += "SELECT DISTINCT " + this.selects; +" ";
+    query += "WHERE { " + this.triplesString + " } ";
+    if (this.lastRemarks != "")
+        query += this.lastRemarks;
+    return query;
+}
+
+
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
@@ -72,9 +128,26 @@ app.set('port', process.env.PORT || 3000);
 var server = app.listen(app.get('port'), function () {
     debug('Express server listening on port ' + server.address().port);
     
-    var querie = 'SELECT * WHERE {?s ?p ?o}';
-    endpoint.selectQuery(querie, function (error, response) {
-        console.log(response.body)
+    var q = new Query();
+    q.addPrefix('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#');
+    q.addPrefix('ontology', 'http://dbpedia.org/ontology/');
+    q.addTriple('?bookUri', 'rdf:type', 'ontology:Book');
+    q.addSelect('?bookUri');
+    
+    var queryAuto = q.returnQuery();
+
+    var query1 = 'SELECT * WHERE {?s ?p ?o}';   
+    var prefix1 = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>';
+    var prefix2 = 'PREFIX ontology: <http://dbpedia.org/ontology/>';
+    var whereClause = 'select distinct ?bookUri where { ?bookUri  rdf:type ontology:Book .} limit 100';
+    var query2 = prefix1 + " " + prefix2 + " " + whereClause;
+    
+    var prefix1_3 = 'PREFIX owl:<http://dbpedia.org/owl/>';
+    var whereClause3 = 'SELECT distinct ?book ?genre WHERE {  ?book owl:literaryGenre ?genre .}';
+    var query3 = prefix1 + " " + prefix2 + " " + prefix1_3 + " " + whereClause3;
+    
+    endpoint.selectQuery(queryAuto, function (error, response) {
+        console.log(response.body);
     });
 });
 
