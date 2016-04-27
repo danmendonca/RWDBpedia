@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="public\core.js" />
     <Compile Include="routes\api\SparqlQuery.js" />
     <Compile Include="routes\book.js" />
     <Compile Include="routes\index.js" />
@@ -45,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
-    <Folder Include="lib\" />
     <Folder Include="public\" />
     <Folder Include="public\images\" />
     <Folder Include="public\javascripts\" />

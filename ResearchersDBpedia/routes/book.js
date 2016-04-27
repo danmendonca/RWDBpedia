@@ -1,4 +1,7 @@
 ﻿var express = require('express');
+var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
+
 var SparqlQuery = require('./api/SparqlQuery');
 var router = express.Router();
 
@@ -47,6 +50,7 @@ router.get('/label/:label', function (req, res) {
     
     var queryAuto = q.returnQuery();
     var result = endpoint.selectQuery(queryAuto, function (error, response) {
+        var json_ans = JSON.parse(response.body);
         res.send(response.body);
         return response.body;
     });
@@ -82,8 +86,18 @@ router.get('/subject/:sub', function (req, res) {
     );
     var queryAuto = q.returnQuery() + "GROUP BY ?book";
     var result = endpoint.selectQuery(queryAuto, function (error, response) {
-        res.send(response.body);
-        return response.body;
+        var json_ans = JSON.parse(response.body).results.bindings;
+        var jsAns = [];
+        json_ans.forEach(function (entry) {
+            var obj = new Object();
+            obj.title = entry.title.value;
+            obj.abstract = entry.abstract.value;
+            obj.author = entry.author.value;
+            obj.description = entry.description.value;
+            jsAns.push(obj);
+        });
+        res
+        res.send(JSON.stringify(jsAns));
     });
 });
 router.get('/title/:title', function (req, res) {
