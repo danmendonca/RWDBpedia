@@ -8,11 +8,13 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var book = require('./routes/book.js');
+
 
 //SPARQL config
 var request = require('request');
 var SparqlHttp = require('sparql-http-client');
-var SparqlQuery = require('./lib/SparqlQuery.js');
+//var SparqlQuery = require('./lib/SparqlQuery');
 // use the request module for all requests
 SparqlHttp.request = SparqlHttp.requestModuleRequest(request);
 // create an object instance for the endpoint 
@@ -36,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
+app.use('/book', book);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -73,6 +76,8 @@ app.set('port', process.env.PORT || 3000);
 var server = app.listen(app.get('port'), function () {
     debug('Express server listening on port ' + server.address().port);
     
+    /** How to query!
+     * 
     var q = new SparqlQuery();
     q.addPrefix('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#');
     q.addPrefix('ontology', 'http://dbpedia.org/ontology/');
@@ -94,6 +99,8 @@ var server = app.listen(app.get('port'), function () {
     endpoint.selectQuery(queryAuto, function (error, response) {
         console.log(response.body);
     });
+     * 
+     **/
 });
 
 module.exports = app;
