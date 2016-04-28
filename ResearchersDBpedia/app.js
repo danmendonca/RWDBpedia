@@ -35,10 +35,25 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/book', book);
+
+
+//application ===========================
+app.get('/', function (req, res) {
+    
+    res.sendFile(path.join(__dirname, 'public/index.html'));
+
+});
+
+app.get('/isbn/', function (req, res) {
+    
+    res.sendFile(path.join(__dirname, 'public/test_isbn.html'));
+
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

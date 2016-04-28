@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>LAPD 2016</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body id="page-top" class="index" ng-app="lapdApp">
+
+    <section id="books_section" ng-controller="bookController">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">Books page</div>
+            <div class="panel-body">
+
+                <div class="col-sm-6 col-md-3" ng-repeat="entry in books">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/400x300" alt="">
+                        <div class="caption">
+                            <h3>{{entry.title}}</h3>
+                            <p>{{entry.description}}</p>
+
+                            <table class="table">
+                                <tr>
+                                    <td>Author</td>
+                                    <td>{{entry.author}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Publisher</td>
+                                    <td>{{entry.publisher}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Subject</td>
+                                    <td>{{entry.nfs}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="book_by_isbn" ng-controller="bookController">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Book 
+            </div>
+            <div class="panel-body">
+
+                <div class="col-md-8 col-sm-6 hero-feature" ng-repeat="entry in book_by_isbn">
+                    <div class="thumbnail">
+                        <img src="http://placehold.it/400x300" alt="">
+                        <div class="caption">
+                            <h3>{{entry.title}}</h3>
+                            <p>{{entry.description}}</p>
+
+                            <table class="table">
+                                <tr>
+                                    <td>Author</td>
+                                    <td>{{entry.author}}</td>
+                                </tr>
+                                <tr>
+                                    <td>ISBN</td>
+                                    <td>{{entry.isbn}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Publisher</td>
+                                    <td>{{entry.publisher}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Subject</td>
+                                    <td>{{entry.nfs}}</td>
+                                </tr>
+                                <tr>
+                                    <td>References</td>
+                                    <td>Reference #1</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Reference #2</td>
+                                </tr>
+                                <tr>
+                                    <td>Cites</td>
+                                    <td>Citation #1</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Citation #2</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+    <script src="public/core.js"></script>
+</body>
+</html>

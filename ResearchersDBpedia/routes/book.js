@@ -24,7 +24,8 @@ addBookPrefixes = function (q) {
 addBookTriples = function (q) {
     q.addTriple('?book rdf:type dbo:Book .');
     q.appendTriple('?book dbp:name ?b_title .');
-    q.appendTriple('?book dbp:author ?b_author .');
+    q.appendTriple('?book dbp:author ?author .');
+    q.appendTriple('?author dbp:name ?b_author .')
     q.appendTriple('?book dbo:abstract ?b_abs .');
     q.appendTriple('?book rdfs:comment ?b_desc .');
 }
@@ -62,26 +63,27 @@ router.get('/publisher/:pub', function (req, res) {
 router.get('/author/:author', function (req, res) {
     res.send("Not implemented");
 });
-router.get('/subject/:sub', function (req, res) {
+
+
+router.get('/isbn/:isbn', function (req, res) {
     var q = new SparqlQuery();
     addBookPrefixes(q);
-    
-    q.addSelect("SELECT DISTINCT (SAMPLE(?b_title) AS ?title) (SAMPLE(?b_author) AS ?author) (SAMPLE(?b_abs) AS ?abstract) (SAMPLE(?b_desc) AS ?description)");
-    
+    q.addSelect("SELECT DISTINCT (SAMPLE(?b_title) AS ?title) (SAMPLE(?b_author) AS ?author)" 
+  + " (SAMPLE(?b_abs) AS ?abstract) (SAMPLE(?b_desc) AS ?description)" 
+  + " (SAMPLE(?b_nfs) AS ?nfs) (SAMPLE(?b_publisher) AS ?publisher) (SAMPLE(?b_isbn) AS ?isbn)");
     addBookTriples(q);
-    q.appendTriple('?book dbo:nonFictionSubject ?b_nfs .');
+    q.appendTriple('?book dbo:nonFictionSubject ?b__nfs .');
+    q.appendTriple('?b__nfs rdfs:label ?b_nfs .');
     q.appendTriple('?book dct:subject ?b_sbj .');
     q.appendTriple('?book dbp:genre ?b_genre .');
-  
+    q.appendTriple('?book dbp:publisher ?b__publisher .');
+    q.appendTriple('?b__publisher rdfs:label ?b_publisher .');
+    q.appendTriple('?book dbp:isbn ?b_isbn .');
+    
     q.addWhereFilter(
-        '(contains(str(?b_title), "' + req.params.sub + '")' 
-    + ' || contains(str(?b_abs), "' + req.params.sub + '")'
-    + ' || contains(str(?b_desc), "' + req.params.sub + '")'
-    + ' || contains(str(?b_nfs), "' + req.params.sub + '")'
-    + ' || contains(str(?b_sbj), "' + req.params.sub + '")'
-    + ' || contains(str(?b_genre), "' + req.params.sub + '") )'
-    + ' && LANG(?b_title) = "en"'
-    + ' && LANG(?b_abs) = "en"'
+        '(contains(str(?b_isbn), "' + req.params.isbn + '") )' 
+    + ' && LANG(?b_title) = "en"' 
+    + ' && LANG(?b_abs) = "en"' 
     + ' && LANG(?b_desc) = "en"'
     );
     var queryAuto = q.returnQuery() + "GROUP BY ?book";
@@ -94,9 +96,58 @@ router.get('/subject/:sub', function (req, res) {
             obj.abstract = entry.abstract.value;
             obj.author = entry.author.value;
             obj.description = entry.description.value;
+            obj.nfs = entry.nfs.value;
+            obj.publisher = entry.publisher.value;
+            obj.isbn = entry.isbn.value;
             jsAns.push(obj);
         });
-        res
+        res.send(JSON.stringify(jsAns));
+    });
+});
+
+
+
+router.get('/subject/:sub', function (req, res) {
+    var q = new SparqlQuery();
+    addBookPrefixes(q);
+    
+    q.addSelect("SELECT DISTINCT (SAMPLE(?b_title) AS ?title) (SAMPLE(?b_author) AS ?author)" 
+  + " (SAMPLE(?b_abs) AS ?abstract) (SAMPLE(?b_desc) AS ?description)" 
+  + " (SAMPLE(?b_nfs) AS ?nfs) (SAMPLE(?b_publisher) AS ?publisher)");
+    
+    addBookTriples(q);
+    q.appendTriple('?book dbo:nonFictionSubject ?b__nfs .');
+    q.appendTriple('?b__nfs rdfs:label ?b_nfs .');
+    q.appendTriple('?book dct:subject ?b_sbj .');
+    q.appendTriple('?book dbp:genre ?b_genre .');
+    q.appendTriple('?book dbp:publisher ?b__publisher .');
+    q.appendTriple('?b__publisher rdfs:label ?b_publisher .');
+    
+    q.addWhereFilter(
+        '(contains(str(?b_title), "' + req.params.sub + '")' 
+    + ' || contains(str(?b_abs), "' + req.params.sub + '")' 
+    + ' || contains(str(?b_desc), "' + req.params.sub + '")' 
+    + ' || contains(str(?b__nfs), "' + req.params.sub + '")' 
+    + ' || contains(str(?b_sbj), "' + req.params.sub + '")' 
+    + ' || contains(str(?b_genre), "' + req.params.sub + '") )' 
+    + ' && LANG(?b_title) = "en"' 
+    + ' && LANG(?b_abs) = "en"' 
+    + ' && LANG(?b_desc) = "en"'
+    );
+    var queryAuto = q.returnQuery() + "GROUP BY ?book";
+    var result = endpoint.selectQuery(queryAuto, function (error, response) {
+        var json_ans = JSON.parse(response.body).results.bindings;
+        var jsAns = [];
+        json_ans.forEach(function (entry) {
+            var obj = new Object();
+            obj.title = entry.title.value;
+            obj.abstract = entry.abstract.value;
+            obj.author = entry.author.value;
+            obj.description = entry.description.value;
+            obj.nfs = entry.nfs.value;
+            obj.publisher = entry.publisher.value;
+            jsAns.push(obj);
+        });
         res.send(JSON.stringify(jsAns));
     });
 });
