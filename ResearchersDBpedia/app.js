@@ -7,8 +7,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
-var book = require('./routes/book.js');
+var publishers = require('./routes/publishers');
+var authors = require('./routes/authors.js');
+var books = require('./routes/books.js');
 
 
 //SPARQL config
@@ -38,8 +39,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
-app.use('/book', book);
+app.use('/book', books);
+
+
+//application ===========================
+app.get('/', function (req, res) {
+    
+    res.sendFile(path.join(__dirname, 'public/index.html'));
+
+});
+
+app.get('/isbn/', function (req, res) {
+    
+    res.sendFile(path.join(__dirname, 'public/test_isbn.html'));
+
+});
 
 
 //application ===========================

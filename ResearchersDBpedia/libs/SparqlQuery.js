@@ -26,7 +26,7 @@ SparqlQuery.prototype.appendPrefix = function (prefix) {
 //selects
 SparqlQuery.prototype.addSelect = function (select) {
     if (select != null) {
-        this.selects = select + " ";
+        this.selects = select;
     }
 }
 SparqlQuery.prototype.appendSelect = function (select) {

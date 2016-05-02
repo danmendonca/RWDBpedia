@@ -1,0 +1,36 @@
+﻿<section id="books_section" ng-controller="booksController">
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Books page
+            <button ng-click="findBySubject()" value="clickme">Button</button>
+        </div>
+        <div class="panel-body">
+
+            <div class="col-sm-6 col-md-3" ng-repeat="entry in books">
+                <div class="thumbnail">
+                    <img src="http://placehold.it/400x300" alt="">
+                    <div class="caption">
+                        <h3>{{entry.title}}</h3>
+                        <p>{{entry.description}}</p>
+
+                        <table class="table">
+                            <tr>
+                                <td>Author</td>
+                                <td>{{entry.author}}</td>
+                            </tr>
+                            <tr>
+                                <td>Publisher</td>
+                                <td>{{entry.publisher}}</td>
+                            </tr>
+                            <tr>
+                                <td>Subject</td>
+                                <td>{{entry.nfs}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
