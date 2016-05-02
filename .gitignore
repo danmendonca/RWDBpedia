@@ -37,3 +37,4 @@ node_modules
 
 #Visual Studio
 *.ntvs_analysis.dat
+*.suo
