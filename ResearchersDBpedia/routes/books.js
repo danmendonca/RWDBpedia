@@ -13,7 +13,7 @@ var endpoint = new SparqlHttp({ endpointUrl: 'http://dbpedia.org/sparql' });
 
 
 //============================= PREPARING SPARQL HEADER
-//here should be all the prefixes necessary for the books sparql queries -- Use the standard names!
+//here should be all the prefixes necessary for the books sparql queries
 addBookPrefixes = function (q) {
     q.addPrefix('PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>');
     q.appendPrefix('PREFIX dct: <http://purl.org/dc/terms/>');
@@ -33,13 +33,17 @@ addBookTriples = function (q) {
     q.appendTriple('?book rdfs:comment ?b_desc .'); //description
     q.appendTriple('?book dbp:publisher ?b_publisher_tmp .');
     q.appendTriple('?b_publisher_tmp rdfs:label ?b_publisher .'); //publisher
+    q.appendTriple('?book dbo:nonFictionSubject ?b_nfs_tmp .'); 
+    q.appendTriple('?b_nfs_tmp rdfs:label ?b_nfs .'); //non-fiction-subject
 
 }
 
 //here should be all the information related that we will need the query to retrieve
 addSelectSampleParams = function (q) {
-    var selectParam = "SELECT DISTINCT (SAMPLE(?b_title) AS ?title)(SAMPLE(?b_author) AS ?author)" 
-    + " (SAMPLE(?b_abs) AS ?abstract) (SAMPLE(?b_desc) AS ?description) (SAMPLE(?b_publisher) AS ?publisher)";
+    var selectParam = "SELECT DISTINCT (SAMPLE(?b_title) AS ?title)"
+    + " (SAMPLE(?b_author) AS ?author) (SAMPLE(?b_abs) AS ?abstract)"
+    + " (SAMPLE(?b_desc) AS ?description) (SAMPLE(?b_publisher) AS ?publisher) "
+    + " (SAMPLE(?b_nfs) AS ?nfs)";
     q.addSelect(selectParam);
 }
 
@@ -50,6 +54,12 @@ appendLangFilters = function (q){
 }
 
 
+prepareStandardQuery = function (q){
+    addBookPrefixes(q);
+    addSelectSampleParams(q);
+    addBookTriples(q);
+}
+
 
 //============================= SETTING OBJ COMMON FIELDS
 setObjProperties = function (obj, entry) {
@@ -58,6 +68,7 @@ setObjProperties = function (obj, entry) {
     obj.author = entry.author.value;
     obj.description = entry.description.value;
     obj.publisher = entry.publisher.value;
+    obj.nfs = entry.nfs.value;
 };
 
 
@@ -69,44 +80,37 @@ router.get('/', function (req, res) {
     res.send('Nothing to see here!');
 });
 
-router.get('/publisher/:pub', function (req, res) {
-    res.send("Not implemented");
-});
-router.get('/author/:author', function (req, res) {
-    res.send("Not implemented");
-});
 
-//book queries
+/**
+ * 
+ * one book queries
+ * 
+ */ 
 router.get('/isbn/:isbn', function (req, res) {
     var q = new SparqlQuery();
-    addBookPrefixes(q);
-
-    addSelectSampleParams(q);
-    q.appendSelect("(SAMPLE(?b_isbn) AS ?isbn)")
+    prepareStandardQuery(q);
     
-    addBookTriples(q);
+    //isbn
+    q.appendSelect("(SAMPLE(?b_isbn) AS ?isbn)")
+    q.appendTriple('?book dbp:isbn ?b_isbn .');
+    
+    //curiosity --TODO delete maybe?!
     q.appendTriple('?book dct:subject ?b_sbj .');
     q.appendTriple('?book dbp:genre ?b_genre .');
-    q.appendTriple('?book dbp:isbn ?b_isbn .');
-    //nfs
-    q.appendTriple('?book dbo:nonFictionSubject ?b_nfs_tmp .');
-    q.appendTriple('?b_nfs_tmp rdfs:label ?b_nfs .');
-    q.appendSelect('(SAMPLE(?b_nfs) AS ?nfs)')
     
     q.addWhereFilter(
-        '(contains(str(?b_isbn), "' + req.params.isbn + '") )' 
+        '(contains(lcase(str(?b_isbn)), "' + req.params.isbn.toLowerCase() + '") )' 
     );
     appendLangFilters(q);
     
+
     var queryAuto = q.returnQuery() + "GROUP BY ?book";
-    
     var result = endpoint.selectQuery(queryAuto, function (error, response) {
         var json_ans = JSON.parse(response.body).results.bindings;
         var jsAns = [];
         json_ans.forEach(function (entry) {
             var obj = new Object();
             setObjProperties(obj, entry);
-            obj.nfs = entry.nfs.value;
             obj.isbn = entry.isbn.value;
             jsAns.push(obj);
         });
@@ -116,18 +120,17 @@ router.get('/isbn/:isbn', function (req, res) {
 });
 
 
-//books queries
+/**
+ * 
+ * multiple books queries
+ * 
+ */ 
 router.get('/subject/:sub', function (req, res) {
     var q = new SparqlQuery();
-    addBookPrefixes(q);
-    addSelectSampleParams(q);
-    
-    addBookTriples(q);
-    
-    q.appendTriple('?book dbo:nonFictionSubject ?b_nfs_tmp .');
-    q.appendTriple('?b_nfs_tmp rdfs:label ?b_nfs .');
+    prepareStandardQuery(q);
+
+    //curiosity -- TODO delete maybe?!
     q.appendTriple('?book dct:subject ?b_sbj .');
-    q.appendSelect('(SAMPLE(?b_nfs) AS ?nfs)')
     
     
     q.addWhereFilter(
@@ -139,18 +142,44 @@ router.get('/subject/:sub', function (req, res) {
     );
     appendLangFilters(q);
     var queryAuto = q.returnQuery() + "GROUP BY ?book";
+
     var result = endpoint.selectQuery(queryAuto, function (error, response) {
         var json_ans = JSON.parse(response.body).results.bindings;
         var jsAns = [];
         json_ans.forEach(function (entry) {
             var obj = new Object();
             setObjProperties(obj, entry);
-            obj.nfs = entry.nfs.value;
             jsAns.push(obj);
         });
         res.send(JSON.stringify(jsAns));
     });
 });
+
+router.get('/publisher/:pub', function (req, res) {
+    var q = new SparqlQuery();
+    prepareStandardQuery(q);
+    
+    q.addWhereFilter('contains(lcase(?b_publisher), "' + req.params.pub.toLowerCase() + '" )');
+    appendLangFilters(q);
+
+    var queryString = q.returnQuery() + " GROUP BY ?book";
+    endpoint.selectQuery(queryString, function (error, response) {
+        var json_ans = JSON.parse(response.body).results.bindings;
+        var jsAns = [];
+        json_ans.forEach(function (entry) {
+            var obj = new Object();
+            setObjProperties(obj, entry);
+            jsAns.push(obj);
+        });
+        res.send(JSON.stringify(jsAns));
+    });
+
+
+});
+router.get('/author/:author', function (req, res) {
+    res.send("Not implemented");
+});
+
 router.get('/title/:title', function (req, res) {
     res.send("Not implemented");
 });

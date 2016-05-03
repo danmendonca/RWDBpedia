@@ -56,19 +56,6 @@ app.get('/isbn/', function (req, res) {
 });
 
 
-//application ===========================
-app.get('/', function (req, res) {
-    
-    res.sendFile(path.join(__dirname, 'public/index.html'));
-
-});
-
-app.get('/isbn/', function (req, res) {
-    
-    res.sendFile(path.join(__dirname, 'public/test_isbn.html'));
-
-});
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
@@ -104,32 +91,6 @@ app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), function () {
     debug('Express server listening on port ' + server.address().port);
-    
-    /** How to query!
-     * 
-    var q = new SparqlQuery();
-    q.addPrefix('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#');
-    q.addPrefix('ontology', 'http://dbpedia.org/ontology/');
-    q.addTriple('?bookUri', 'rdf:type', 'ontology:Book');
-    q.addSelect('?bookUri');
-    
-    var queryAuto = q.returnQuery();
-
-    var query1 = 'SELECT * WHERE {?s ?p ?o}';   
-    var prefix1 = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>';
-    var prefix2 = 'PREFIX ontology: <http://dbpedia.org/ontology/>';
-    var whereClause = 'select distinct ?bookUri where { ?bookUri  rdf:type ontology:Book .} limit 100';
-    var query2 = prefix1 + " " + prefix2 + " " + whereClause;
-    
-    var prefix1_3 = 'PREFIX owl:<http://dbpedia.org/owl/>';
-    var whereClause3 = 'SELECT distinct ?book ?genre WHERE {  ?book owl:literaryGenre ?genre .}';
-    var query3 = prefix1 + " " + prefix2 + " " + prefix1_3 + " " + whereClause3;
-    
-    endpoint.selectQuery(queryAuto, function (error, response) {
-        console.log(response.body);
-    });
-     * 
-     **/
 });
 
 module.exports = app;
