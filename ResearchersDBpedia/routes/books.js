@@ -119,6 +119,10 @@ router.get('/isbn/:isbn', function (req, res) {
     });
 });
 
+router.get('/bookiri/:book', function (req, res) {
+    res.send("Not implemented");
+});
+
 
 /**
  * 
@@ -173,14 +177,27 @@ router.get('/publisher/:pub', function (req, res) {
         });
         res.send(JSON.stringify(jsAns));
     });
-
-
 });
 router.get('/author/:author', function (req, res) {
-    res.send("Not implemented");
+    var q = new SparqlQuery();
+    prepareStandardQuery(q);
+    
+    q.addWhereFilter('CONTAINS(LCASE(STR(?b_author)), "' + req.params.author.toLowerCase() + '" )');
+    appendLangFilters(q);
+    
+    var queryString = q.returnQuery() + " GROUP BY ?book";
+    endpoint.selectQuery(queryString, function (error, response) {
+        var json_ans = JSON.parse(response.body).results.bindings;
+        var jsAns = [];
+        json_ans.forEach(function (entry) {
+            var obj = new Object();
+            setObjProperties(obj, entry);
+            jsAns.push(obj);
+        });
+        res.send(JSON.stringify(jsAns));
+    });
 });
-
-router.get('/title/:title', function (req, res) {
+router.get('/authoriri/:author', function (req, res) {
     res.send("Not implemented");
 });
 
