@@ -40,18 +40,13 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/book', books);
+app.use('/author', authors);
 
 
 //application ===========================
 app.get('/', function (req, res) {
     
     res.sendFile(path.join(__dirname, 'public/index.html'));
-
-});
-
-app.get('/isbn/', function (req, res) {
-    
-    res.sendFile(path.join(__dirname, 'public/test_isbn.html'));
 
 });
 
