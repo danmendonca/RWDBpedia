@@ -1,19 +1,21 @@
-﻿var express = require('express');
+﻿//
+//
+//Requires
+var express = require('express');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
-
 var SparqlQuery = require('../libs/SparqlQuery');
-var router = express.Router();
-
+//
+//
 //SPARQL config
+var router = express.Router();
 var request = require('request');
 var SparqlHttp = require('sparql-http-client');
 SparqlHttp.request = SparqlHttp.requestModuleRequest(request);
 var endpoint = new SparqlHttp({ endpointUrl: 'http://dbpedia.org/sparql' });
-
-
-//============================= PREPARING SPARQL HEADER
-//here should be all the prefixes necessary for the Author sparql queries
+//
+//
+//Sparql query preparation
 addAuthorPrefixes = function (q) {
     q.addPrefix('PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>');
     q.appendPrefix('PREFIX dbo: <http://dbpedia.org/ontology/>');
@@ -29,6 +31,7 @@ addAuthorSelectParams = function (q) {
     q.addSelect(selectParam);
 }
 
+
 appendAuthorTriples = function (q) {
     q.appendTriple('?author dbp:name ?birthName .');
     q.appendTriple('?author dbp:nationality ?nationalityIRI .');
@@ -39,6 +42,7 @@ appendAuthorTriples = function (q) {
     q.appendTriple('?author dbp:birthPlace ?birthPlaceIRI .');
     q.appendTriple('?birthPlaceIRI rdfs:label ?birthPlace .');
 }
+
 
 appendAuthorLangFilters = function (q) {
     q.appendWhereFilterAnd('LANG(?nationality) = "en"');
@@ -56,7 +60,9 @@ setAuthorObjProperties = function (obj, entry) {
     obj.occupation = entry.occupation.value;
     obj.birthPlace = entry.birthPlace.value;
 };
-
+//
+//
+//Router calls
 router.get('/name/:name', function(req, res) {
     var q = new SparqlQuery();
     addAuthorPrefixes(q);
