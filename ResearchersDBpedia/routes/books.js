@@ -33,8 +33,8 @@ addBookTriples = function (q) {
     q.appendTriple('?book dbp:publisher ?b_publisher_tmp .');
     q.appendTriple('?b_publisher_tmp rdfs:label ?b_publisher .'); //publisher
     q.appendTriple('?book dbo:nonFictionSubject ?b_nfs_tmp .'); 
-    q.appendTriple('?b_nfs_tmp rdfs:label ?b_nfs .'); //non-fiction-subject
-
+	q.appendTriple('?b_nfs_tmp rdfs:label ?b_nfs .'); //non-fiction-subject
+	q.appendTriple('?book dbo:wikiPageID ?b_wikiID .'); // wiki page ID
 }
 
 addSelectSampleParams = function (q) {
@@ -42,6 +42,7 @@ addSelectSampleParams = function (q) {
     + " (SAMPLE(?b_author) AS ?author) (SAMPLE(?b_abs) AS ?abstract)"
     + " (SAMPLE(?b_desc) AS ?description) (SAMPLE(?b_publisher) AS ?publisher) "
     + " (SAMPLE(?b_nfs) AS ?nfs)";
+	// +" (SAMPLE(?b_wikiID) AS ?wikiID)";
     q.addSelect(selectParam);
 }
 
@@ -63,7 +64,8 @@ setObjProperties = function (obj, entry) {
     obj.author = entry.author.value;
     obj.description = entry.description.value;
     obj.publisher = entry.publisher.value;
-    obj.nfs = entry.nfs.value;
+	obj.nfs = entry.nfs.value;
+	// obj.wikiID = entry.wikiID.value;
 };
 //
 //
@@ -86,7 +88,10 @@ router.get('/isbn/:isbn', function (req, res) {
     appendLangFilters(q);
     
 
-    var queryAuto = q.returnQuery() + "GROUP BY ?book";
+	var queryAuto = q.returnQuery() + "GROUP BY ?book";
+	
+	console.log("\n\nsingle book query:\n" + queryAuto);
+
     endpoint.selectQuery(queryAuto, function (error, response) {
         var jsonAns = JSON.parse(response.body).results.bindings;
         var jsAns = [];
@@ -122,7 +127,9 @@ router.get('/subject/:sub', function (req, res) {
    + ' )' 
     );
     appendLangFilters(q);
-    var queryAuto = q.returnQuery() + "GROUP BY ?book";
+	var queryAuto = q.returnQuery() + "GROUP BY ?book";
+	
+	console.log("\n\nmultiple book query:\n" + queryAuto);
 
     endpoint.selectQuery(queryAuto, function (error, response) {
         var jsonAns = JSON.parse(response.body).results.bindings;
@@ -144,7 +151,10 @@ router.get('/publisher/:pub', function (req, res) {
     q.addWhereFilter('contains(lcase(?b_publisher), "' + req.params.pub.toLowerCase() + '" )');
     appendLangFilters(q);
 
-    var queryString = q.returnQuery() + " GROUP BY ?book";
+	var queryString = q.returnQuery() + " GROUP BY ?book";
+	
+	console.log("\n\npublisher query:\n" + queryAuto);
+
     endpoint.selectQuery(queryString, function (error, response) {
         var jsonAns = JSON.parse(response.body).results.bindings;
         var jsAns = [];
@@ -166,7 +176,10 @@ router.get('/author/:author', function (req, res) {
         + req.params.author.toLowerCase() + '" )');
     appendLangFilters(q);
     
-    var queryString = q.returnQuery() + " GROUP BY ?book";
+	var queryString = q.returnQuery() + " GROUP BY ?book";
+	
+	console.log("\n\nauthor query:\n" + queryAuto);
+
     endpoint.selectQuery(queryString, function (error, response) {
         var jsonAns = JSON.parse(response.body).results.bindings;
         var jsAns = [];
