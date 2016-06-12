@@ -5,7 +5,8 @@
 
             <div class="col-md-8 col-sm-6 hero-feature" ng-repeat="entry in book">
                 <div class="thumbnail">
-                    <img src="http://placehold.it/400x300" alt="">
+                    <img ng-if="entry.isbn.indexOf('ISBN') !== -1"
+                         src="http://covers.openlibrary.org/b/isbn/{{entry.isbn.substring(5,entry.isbn.length)}}-L.jpg " alt="">
                     <div class="caption">
                         <h3>{{entry.title}}</h3>
                         <p>{{entry.description}}</p>
@@ -17,7 +18,7 @@
                             </tr>
                             <tr>
                                 <td>ISBN</td>
-                                <td>{{entry.data.isbn}}</td>
+                                <td>{{entry.isbn}}</td>
                             </tr>
                             <tr>
                                 <td>Publisher</td>
@@ -27,29 +28,14 @@
                                 <td>Subject</td>
                                 <td>{{entry.nfs}}</td>
                             </tr>
-                            <!--
-                            <tr>
-                                <td>Wiki ID</td>
-                                <td>{{entry.wikiID}}</td>
+                            <tr ng-if="entry.isbn.indexOf('ISBN') !== -1">
+                                <td>ISBN</td>
+                                <td>{{entry.isbn.substring(5,entry.isbn.length)}}</td> <!-- clean isbn-->
                             </tr>
-                            -->
-                            <!--<tr>
-                                <td>References</td>
-                                <td>Reference #1</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>Reference #2</td>
-                            </tr>
-                            <tr>
-                                <td>Cites</td>
-                                <td>Citation #1</td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>Citation #2</td>
-                            </tr>-->
                         </table>
+                        <p>
+                            <a ng-if="entry.isbn.indexOf('ISBN') !== -1" href="https://www.amazon.co.uk/s/ref=sr_adv_b?search-alias=stripbooks&unfiltered=1&__mk_en_GB=%C3%85M%C3%85Z%C3%95%C3%91&field-keywords=&field-author=&field-title=&field-isbn={{entry.isbn.substring(5,entry.isbn.length)}}&field-publisher=&node=&field-binding_browse-bin=&field-subject=&emi=&field-dateop=&field-datemod=&field-dateyear=&sort=&Adv-Srch-Books-Submit.x=73&Adv-Srch-Books-Submit.y=11" class="btn btn-primary">Link to amazon!</a>
+                        </p>
                     </div>
                 </div>
             </div>
