@@ -30,18 +30,21 @@ addpublisherTriples = function (q) {
 	q.addTriple("?book rdf:type dbo:Book .");
 	q.appendTriple("?book dbp:publisher ?b_publisher_iri ."); //iri
 	q.appendTriple("?b_publisher_iri rdfs:label ?b_publisher ."); //publisher label
+	q.appendTriple("?b_publisher_iri dbo:country ?countryIri .");
+	q.appendTriple("?countryIri rdfs:label ?country .");
 }
 
 
 addPublisherSelects = function (q) {
 	var selectParam = "SELECT DISTINCT (SAMPLE(?b_publisher) AS ?publisher) "
-	+ "(SAMPLE(?b_publisher_iri) AS ?publisherIri)";
+	+ "(SAMPLE(?b_publisher_iri) AS ?publisherIri) (SAMPLE(?country) AS ?country)";
 	q.addSelect(selectParam);
 }
 
 
 appendPublisherLangFilters = function (q) {
 	q.appendWhereFilterAnd('LANG(?b_publisher) = "en"');
+	q.appendWhereFilterAnd('LANG(?country) = "en"');
 }
 
 
@@ -54,12 +57,13 @@ preparePublisherQuery = function (q) {
 
 setPublisherObjProperties = function (obj, entry) {
 	obj.publisher = entry.publisher.value;
-    obj.publisherIri = entry.publisherIri.value;
+	obj.publisherIri = entry.publisherIri.value;
+    obj.country = entry.country.value;
 };
 //
 //
 //routes
-router.get('/name/:pub', function (req, res) {
+router.get("/name/:pub", function (req, res) {
 	var q = new SparqlQuery();
 	preparePublisherQuery(q);
 	
@@ -78,7 +82,7 @@ router.get('/name/:pub', function (req, res) {
 		res.send(JSON.stringify(jsAns));
 	});
 });
-router.get('/publisheriri/:pub', function (req, res) {
+router.get("/iri/:pub", function (req, res) {
 	var q = new SparqlQuery();
 	preparePublisherQuery(q);
 	

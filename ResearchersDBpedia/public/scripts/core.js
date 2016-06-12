@@ -1,3 +1,5 @@
 ﻿"use strict";
 
-var app = angular.module('lapdApp', ['booksModule', 'BooksDirective', 'authorsModule', 'AuthorsDirective']);
+var app = angular.module('lapdApp', ['booksModule', 'BooksDirective'
+	, "authorsModule", "AuthorsDirective"
+	, "publishersModule", "PublishersDirective"]);
