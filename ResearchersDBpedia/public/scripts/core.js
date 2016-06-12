@@ -2,4 +2,5 @@
 
 var app = angular.module('lapdApp', ['booksModule', 'BooksDirective'
 	, "authorsModule", "AuthorsDirective"
-	, "publishersModule", "PublishersDirective"]);
+	, "publishersModule", "PublishersDirective"
+	, "homeModule", "HomeDirective"]);
