@@ -20,7 +20,7 @@
 		$http.get(apiCall)
 		.success(function (data) {
 			booksBuffer = data;
-			$scope.books = booksBuffer;
+			$scope.data.books = booksBuffer;
 			setBooksVisibility(false, true);
 		})
 		.error(function () {
@@ -34,7 +34,7 @@
 		$http.get(apiCall)
 		.success(function (data) {
 			bookByIsbn = data;
-			$scope.book = bookByIsbn;
+			$scope.data.book = bookByIsbn;
 			setBooksVisibility(true, false);
 		})
 		.error(function () {
@@ -49,7 +49,7 @@
 	$http.get('/book/subject/artificial').success(function (data) {
 	    setBooksVisibility(false, true);
 		booksBuffer = data;
-		$scope.books = booksBuffer;
+		$scope.data.books = booksBuffer;
 
 	}).error(function () {
 		console.log("Ops: could not get any data");
