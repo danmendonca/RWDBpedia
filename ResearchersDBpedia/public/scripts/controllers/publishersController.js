@@ -45,14 +45,14 @@
 	//
 	//
 	//TEST
-	$http.get("/publisher/name/Virgin")
+	/*$http.get("/publisher/name/Virgin")
 	.success(function (data) {
 		$scope.publishers = data;
 		setViewsDisplay(true, false);
 	})
 	.error(function () {
 		console.log("publishersController-findBublisherByIri: Oops, something went wrong.");
-	});
+	});*/
 
 
 
