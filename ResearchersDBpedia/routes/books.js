@@ -35,13 +35,15 @@ addBookTriples = function (q) {
 	q.appendTriple('?book dbo:nonFictionSubject ?b_nfs_tmp .');
 	q.appendTriple('?b_nfs_tmp rdfs:label ?b_nfs .'); //non-fiction-subject
 	q.appendTriple('?book dbo:wikiPageID ?b_wikiID .'); // wiki page ID
+	q.appendTriple('?book dbp:isbn ?b_isbn .');
 }
 
 addSelectSampleParams = function (q) {
 	var selectParam = "SELECT DISTINCT (SAMPLE(?b_title) AS ?title)" 
     + " (SAMPLE(?b_author) AS ?author) (SAMPLE(?b_abs) AS ?abstract)" 
     + " (SAMPLE(?b_desc) AS ?description) (SAMPLE(?b_publisher) AS ?publisher) " 
-    + " (SAMPLE(?b_nfs) AS ?nfs) (SAMPLE(?b_wikiID) AS ?wikiID)";
+    + " (SAMPLE(?b_nfs) AS ?nfs) (SAMPLE(?b_wikiID) AS ?wikiID)"
+	+ " (SAMPLE(?b_isbn) AS ?isbn)";
 	q.addSelect(selectParam);
 }
 
@@ -65,6 +67,7 @@ setObjProperties = function (obj, entry) {
 	obj.publisher = entry.publisher.value;
 	obj.nfs = entry.nfs.value;
 	obj.wikiID = entry.wikiID.value;
+    obj.isbn = entry.isbn.value;
 };
 //
 //
@@ -72,10 +75,6 @@ setObjProperties = function (obj, entry) {
 router.get('/isbn/:isbn', function (req, res) {
 	var q = new SparqlQuery();
 	prepareStandardQuery(q);
-	
-	//isbn
-	q.appendSelect("(SAMPLE(?b_isbn) AS ?isbn)");
-	q.appendTriple('?book dbp:isbn ?b_isbn .');
 	
 	//curiosity --TODO delete maybe?!
 	q.appendTriple('?book dct:subject ?b_sbj .');
