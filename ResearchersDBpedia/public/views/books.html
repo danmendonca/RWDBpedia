@@ -34,6 +34,9 @@
                                 <td colspan="2"><button ng-click="unsetBook()" value="hide">Hide</button></td>
                             </tr>
                         </table>
+                        <p>
+                            <a ng-if="data.book.isbn.indexOf('ISBN') !== -1" href="https://www.amazon.co.uk/s/ref=sr_adv_b?search-alias=stripbooks&unfiltered=1&__mk_en_GB=%C3%85M%C3%85Z%C3%95%C3%91&field-keywords=&field-author=&field-title=&field-isbn={{data.book.isbn.substring(5,entry.isbn.length)}}&field-publisher=&node=&field-binding_browse-bin=&field-subject=&emi=&field-dateop=&field-datemod=&field-dateyear=&sort=&Adv-Srch-Books-Submit.x=73&Adv-Srch-Books-Submit.y=11" class="btn btn-primary">Find on Amazon!</a>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -50,35 +53,40 @@
         </div>
         <div class="panel-body">
 
-            <div class="col-sm-6 col-md-3" ng-repeat="entry in data.books">
-                <div class="thumbnail">
-                    <img ng-if="entry.isbn.indexOf('ISBN') !== -1"
-                         src="http://covers.openlibrary.org/b/isbn/{{entry.isbn.substring(5,entry.isbn.length)}}-M.jpg " alt="">
-                    <div class="caption">
-                        <h3>{{entry.title}}</h3>
-                        <p>{{entry.description}}</p>
+            <div class="row">
+                <div ng-repeat="entry in data.books">
+                    <div class="clearfix" ng-if="$index % 4 == 0"></div>
+                    <div class="col-sm-3">
+                        <div class="thumbnail">
+                            <img ng-if="entry.isbn.indexOf('ISBN') !== -1"
+                                 src="http://covers.openlibrary.org/b/isbn/{{entry.isbn.substring(5,entry.isbn.length)}}-M.jpg " alt="">
+                            <div class="caption">
+                                <h3>{{entry.title}}</h3>
+                                <p>{{entry.description}}</p>
 
-                        <table class="table">
-                            <tr>
-                                <td>Author</td>
-                                <td>{{entry.author}}</td>
-                            </tr>
-                            <tr>
-                                <td>Publisher</td>
-                                <td>{{entry.publisher}}</td>
-                            </tr>
-                            <tr>
-                                <td>Subject</td>
-                                <td>{{entry.nfs}}</td>
-                            </tr>
-                            <tr ng-if="entry.isbn.indexOf('ISBN') !== -1">
-                                <td>ISBN</td>
-                                <td>{{entry.isbn.substring(5,entry.isbn.length)}}</td> <!-- clean isbn-->
-                            </tr>
-                            <tr>
-                                <td colspan="2"><button ng-click="setBook(entry)" value="hide">Highlight</button></td>
-                            </tr>
-                        </table>
+                                <table class="table">
+                                    <tr>
+                                        <td>Author</td>
+                                        <td>{{entry.author}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Publisher</td>
+                                        <td>{{entry.publisher}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Subject</td>
+                                        <td>{{entry.nfs}}</td>
+                                    </tr>
+                                    <tr ng-if="entry.isbn.indexOf('ISBN') !== -1">
+                                        <td>ISBN</td>
+                                        <td>{{entry.isbn.substring(5,entry.isbn.length)}}</td> <!-- clean isbn-->
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><button ng-click="setBook(entry)" value="hide">Highlight</button></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
