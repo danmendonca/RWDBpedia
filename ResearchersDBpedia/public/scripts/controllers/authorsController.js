@@ -1,6 +1,6 @@
 ﻿var app = angular.module('dbpResearchModule')
-.controller('authorsController', function ($scope, $http) {
-	
+.controller('authorsController', function ($scope, $http, MyData) {
+	$scope.data = MyData.data;
 	var authorsBuffer = null;
 	var authorByIri = null;
 	$scope.IsSingleView = false;
@@ -9,7 +9,7 @@
 	//setting variables
 	$scope.findAuthorByName = function () {
 		if (!$scope.nameInputQuery) return;
-		var apiCall = "/authors/name/" + $scope.nameInputQuery;
+		var apiCall = "/authors/name/" + $scope.data.queryParam;
 		
 		$http.get(apiCall)
 		.success(function (data) {
@@ -22,7 +22,7 @@
 	$scope.findAuthorByIRI = function () {
 		if (!$scope.authorIriInput) return;
 		
-		var apiCall = "/authors/iri/" + $scope.authorIriInput;
+		var apiCall = "/authors/iri/" + $scope.data.queryParam;
 		$http.get(apiCall)
 		.success(function (data) {
 			authorByIri = data;

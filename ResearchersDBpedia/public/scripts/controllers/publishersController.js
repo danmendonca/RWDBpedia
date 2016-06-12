@@ -1,12 +1,12 @@
 ﻿var app = angular.module('dbpResearchModule')
-.controller('publishersController', function ($scope, $http) {
-	
-	$scope.publishers = null;
-	$scope.publisher = null;
-	$scope.publisherIriParam = null;
-	$scope.publisherNameParam = null;
-	$scope.isPublisherView = false;
-	$scope.isPublishersView = false;
+.controller('publishersController', function ($scope, $http, MyData) {
+	$scope.data = MyData.data;
+	$scope.data.publishers = null;
+	$scope.data.publisher = null;
+	$scope.data.publisherIriParam = null;
+	$scope.data.publisherNameParam = null;
+	$scope.data.isPublisherView = false;
+	$scope.data.isPublishersView = false;
 	
 	var setViewsDisplay = function (single, multiple) {
 		$scope.isPublisherView = single;

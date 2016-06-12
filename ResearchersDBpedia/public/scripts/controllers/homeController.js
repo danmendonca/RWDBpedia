@@ -1,49 +1,27 @@
 ﻿var app = angular.module('dbpResearchModule')
-.controller('homeController', function ($scope, $http) {
-	
+.controller('homeController', function ($scope, $http, MyData) {
+	$scope.data = MyData.data;
+
 	$scope.searchByBookButton = false;
 	$scope.searchByAuthorButton = false;
 	$scope.searchByPublisherButton = false;
 	
-	$scope.searchByBook = function () {
-		if (!$scope.searchByBookButton) return;
-		
-		// TODO resto da função:
-		var apiCall = "/authors/name/" + $scope.nameInputQuery;
-		
-		$http.get(apiCall)
-		.success(function (data) {
-			authorsBuffer = data;
-			$scope.authors = authorsBuffer;
-			$scope.IsAuthorsSingleView = false;
-		}).error(function () { console.log("Oops: could not get any data"); });
+	$scope.updateUi = function() {
+	    if ($scope.radio == 'authors')
+	        searchAuthorByName();
 	}
 
-	$scope.searchByAuthor = function () {
-		if (!$scope.searchByAuthorButton) return;
-		
-		// TODO resto da função:
-		var apiCall = "/authors/name/" + $scope.nameInputQuery;
-		
-		$http.get(apiCall)
-		.success(function (data) {
-			authorsBuffer = data;
-			$scope.authors = authorsBuffer;
-			$scope.IsAuthorsSingleView = false;
-		}).error(function () { console.log("Oops: could not get any data"); });
-	}
-
-	$scope.searchByPublisher = function () {
-		if (!$scope.searchByPublisherButton) return;
-		
-		// TODO resto da função:
-		var apiCall = "/authors/name/" + $scope.nameInputQuery;
+	var searchAuthorByName = function() {
+		if (!$scope.data.queryParam) {
+			console.log("Author name empty param.");
+			return;
+		}
+		var apiCall = "/authors/name/" + $scope.data.queryParam;
 		
 		$http.get(apiCall)
 		.success(function (data) {
-			authorsBuffer = data;
-			$scope.authors = authorsBuffer;
-			$scope.IsAuthorsSingleView = false;
+			$scope.data.authors = data;
+			$scope.data.IsAuthorsSingleView = false;
 		}).error(function () { console.log("Oops: could not get any data"); });
 	}
 	

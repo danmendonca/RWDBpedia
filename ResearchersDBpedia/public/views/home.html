@@ -2,13 +2,13 @@
 
     <div class="row" style="margin-top: 200px;">
         <div class="form-group col-sm-4 col-sm-offset-3">
-            <input type="text" class="form-control" id="inputQuery" placeholder="Your query">
+            <input type="text" class="form-control" id="inputQuery" placeholder="Your query" ng-model="data.queryParam">
             <!-- <label for="inputQuery" style="display:none;" data-bind="validationMessage: email, css: { error: !email.isValid() }" class="error"></label> -->
             <!-- como fazer o data-bind? -->
             <small class="text-muted">What to you wish to know more about?</small>
         </div>
         <div class="form-group col-sm-2">
-            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="submit" class="btn btn-primary" ng-click="updateUi()">Search</button>
             <div class="radio">
                 <label>
                     <input type="radio" name="optionsRadios" ng-model="radio" id="books" value="books" checked>
@@ -34,7 +34,7 @@
     </div>
 
     <dbpauthors ng-show="radio == 'authors'"></dbpauthors>
-    <dbpbooks ng-show="radio == 'books''"></dbpbooks>
+    <dbpbooks ng-show="radio == 'books'"></dbpbooks>
     <dbppublishers ng-show="radio == 'publishers'"></dbppublishers>
 
 

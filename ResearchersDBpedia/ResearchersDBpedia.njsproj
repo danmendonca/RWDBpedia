@@ -43,7 +43,6 @@
     <Compile Include="public\scripts\directives\PublishersDirective.js" />
     <Compile Include="routes\articles.js" />
     <Compile Include="routes\authors.js" />
-    <Compile Include="routes\home.js" />
     <Compile Include="routes\books.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\publishers.js" />

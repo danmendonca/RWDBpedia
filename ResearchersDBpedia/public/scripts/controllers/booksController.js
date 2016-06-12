@@ -1,10 +1,12 @@
 ﻿var app = angular.module('dbpResearchModule')
-.controller('booksController', function ($scope, $http) {
-	
+.controller('booksController', function ($scope, $http, MyData) {
+	$scope.data = MyData.data;
 	var booksBuffer = null;
 	var bookByIsbn = null;
-	$scope.listOfBooks = false;
-	$scope.singleBook = false;
+	
+
+	$scope.data.listOfBooks = false;
+	$scope.data.singleBook = false;
 	
 	var setBooksVisibility = function (isSingleBook, isListBooks) {
 		$scope.listOfBooks = isListBooks;
@@ -45,7 +47,7 @@
 	//LIST OF BOOKS
 	
 	$http.get('/book/subject/artificial').success(function (data) {
-		
+	    setBooksVisibility(false, true);
 		booksBuffer = data;
 		$scope.books = booksBuffer;
 
