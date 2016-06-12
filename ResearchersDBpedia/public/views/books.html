@@ -34,6 +34,9 @@
                                 <td colspan="2"><button ng-click="unsetBook()" value="hide">Hide</button></td>
                             </tr>
                         </table>
+                        <p>
+                            <a ng-if="entry.isbn.indexOf('ISBN') !== -1" href="https://www.amazon.co.uk/s/ref=sr_adv_b?search-alias=stripbooks&unfiltered=1&__mk_en_GB=%C3%85M%C3%85Z%C3%95%C3%91&field-keywords=&field-author=&field-title=&field-isbn={{entry.isbn.substring(5,entry.isbn.length)}}&field-publisher=&node=&field-binding_browse-bin=&field-subject=&emi=&field-dateop=&field-datemod=&field-dateyear=&sort=&Adv-Srch-Books-Submit.x=73&Adv-Srch-Books-Submit.y=11" class="btn btn-primary">Find on Amazon!</a>
+                        </p>
                     </div>
                 </div>
             </div>
