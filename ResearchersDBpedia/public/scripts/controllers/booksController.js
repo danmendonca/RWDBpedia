@@ -3,6 +3,8 @@
 	$scope.data = MyData.data;
 	$scope.data.listOfBooks = false;
 	$scope.data.singleBook = false;
+	$scope.data.book = null;
+	$scope.data.books = null;
 	
 	$scope.findBookByIsbn = function () {
 		if (!$scope.bookIsbnParam) return;

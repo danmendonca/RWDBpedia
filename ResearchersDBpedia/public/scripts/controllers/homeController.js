@@ -68,6 +68,15 @@
 		else if ($scope.radio == "publishers") searchPublisherByName();
 		else if ($scope.radio == "books") searchBooksByWord();
 	}
+
+	$scope.setBook = function(book) {
+		$scope.data.book = book;
+		$scope.data.singleBook = true;
+	}
+
+	$scope.unsetBook = function() {
+	    $scope.data.singleBook = false;
+	}
 	
 
 });
