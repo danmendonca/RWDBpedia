@@ -16,7 +16,7 @@ var endpoint = new SparqlHttp({ endpointUrl: 'http://dbpedia.org/sparql' });
 //
 //
 //Sparql query 
-preparationaddBookPrefixes = function (q) {
+addPublisherPrefixes = function (q) {
 q.addPrefix('PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>');
 q.appendPrefix('PREFIX dct: <http://purl.org/dc/terms/>');
 q.appendPrefix('PREFIX foaf: <http://xmlns.com/foaf/0.1/>');
@@ -26,46 +26,45 @@ q.appendPrefix('PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>');
 }
 
 
-addBookTriples = function (q) {
+addpublisherTriples = function (q) {
 	q.addTriple("?book rdf:type dbo:Book .");
 	q.appendTriple("?book dbp:publisher ?b_publisher_iri ."); //iri
 	q.appendTriple("?b_publisher_iri rdfs:label ?b_publisher ."); //publisher label
 }
 
 
-addSelectSampleParams = function (q) {
+addPublisherSelects = function (q) {
 	var selectParam = "SELECT DISTINCT (SAMPLE(?b_publisher) AS ?publisher) "
 	+ "(SAMPLE(?b_publisher_iri) AS ?publisherIri)";
 	q.addSelect(selectParam);
 }
 
 
-appendLangFilters = function (q) {
-	q.appendWhereFilterAnd('LANG(?b_title) = "en"');
+appendPublisherLangFilters = function (q) {
 	q.appendWhereFilterAnd('LANG(?b_publisher) = "en"');
 }
 
 
 preparePublisherQuery = function (q) {
-	addBookPrefixes(q);
-	addSelectSampleParams(q);
-	addBookTriples(q);
+	addPublisherPrefixes(q);
+	addPublisherSelects(q);
+	addpublisherTriples(q);
 }
 
 
-setObjProperties = function (obj, entry) {
+setPublisherObjProperties = function (obj, entry) {
 	obj.publisher = entry.publisher.value;
     obj.publisherIri = entry.publisherIri.value;
 };
 //
 //
 //routes
-router.get('/publisher/:pub', function (req, res) {
+router.get('/name/:pub', function (req, res) {
 	var q = new SparqlQuery();
-	prepareStandardQuery(q);
+	preparePublisherQuery(q);
 	
 	q.addWhereFilter('contains(lcase(?b_publisher), "' + req.params.pub.toLowerCase() + '" )');
-	appendLangFilters(q);
+	appendPublisherLangFilters(q);
 	
 	var queryString = q.returnQuery() + " GROUP BY ?b_publisher";
 	endpoint.selectQuery(queryString, function (error, response) {
@@ -73,7 +72,7 @@ router.get('/publisher/:pub', function (req, res) {
 		var jsAns = [];
 		jsonAns.forEach(function (entry) {
 			var obj = new Object();
-			setObjProperties(obj, entry);
+			setPublisherObjProperties(obj, entry);
 			jsAns.push(obj);
 		});
 		res.send(JSON.stringify(jsAns));
@@ -81,7 +80,7 @@ router.get('/publisher/:pub', function (req, res) {
 });
 router.get('/publisheriri/:pub', function (req, res) {
 	var q = new SparqlQuery();
-	prepareStandardQuery(q);
+	preparePublisherQuery(q);
 	
 	q.addWhereFilter('contains(lcase(?b_publisher), "' + req.params.pub.toLowerCase() + '" )');
 	appendLangFilters(q);
@@ -92,7 +91,7 @@ router.get('/publisheriri/:pub', function (req, res) {
 		var jsAns = [];
 		jsonAns.forEach(function (entry) {
 			var obj = new Object();
-			setObjProperties(obj, entry);
+			setPublisherObjProperties(obj, entry);
 			jsAns.push(obj);
 		});
 		res.send(JSON.stringify(jsAns));
