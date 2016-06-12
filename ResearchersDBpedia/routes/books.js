@@ -121,8 +121,8 @@ router.get('/subject/:sub', function (req, res) {
 		'(contains(lcase(str(?b_title)), "' + req.params.sub + '")' 
     + ' || contains(lcase(str(?b_abs)), "' + req.params.sub + '")' 
     + ' || contains(lcase(str(?b_desc)), "' + req.params.sub + '")' 
-    + ' || contains(lcase(str(?b_sbj)), "' + req.params.sub + '")' 
-   + ' )' 
+    + ' || contains(lcase(str(?b_sbj)), "' + req.params.sub + '") )' 
+    //+ ' && REGEX(?b_isbn, ".{8,}")' 
 	);
 	appendLangFilters(q);
 	var queryAuto = q.returnQuery() + "GROUP BY ?book";
