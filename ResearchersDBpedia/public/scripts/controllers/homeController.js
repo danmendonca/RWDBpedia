@@ -1,4 +1,4 @@
-﻿var app = angular.module('homeModule', [])
+﻿var app = angular.module('dbpResearchModule')
 .controller('homeController', function ($scope, $http) {
 	
 	$scope.searchByBookButton = false;

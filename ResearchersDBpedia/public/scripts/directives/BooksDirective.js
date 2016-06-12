@@ -1,4 +1,4 @@
-﻿var app = angular.module('BooksDirective', []);
+﻿var app = angular.module('dbpResearchModule');
 
 app.directive('dbpbooks', function () {
     return {

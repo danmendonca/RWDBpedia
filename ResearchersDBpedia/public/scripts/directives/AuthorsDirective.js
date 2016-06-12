@@ -1,4 +1,4 @@
-﻿var app = angular.module('AuthorsDirective', []);
+﻿var app = angular.module('dbpResearchModule');
 
 app.directive('dbpauthors', function () {
 	return {

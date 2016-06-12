@@ -1,4 +1,4 @@
-﻿var app = angular.module('HomeDirective', []);
+﻿var app = angular.module('dbpResearchModule', []);
 
 app.directive('dbphome', function () {
 	return {

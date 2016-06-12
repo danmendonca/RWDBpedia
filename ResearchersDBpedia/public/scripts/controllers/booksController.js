@@ -1,4 +1,4 @@
-﻿var app = angular.module('booksModule', [])
+﻿var app = angular.module('dbpResearchModule')
 .controller('booksController', function ($scope, $http) {
 	
 	var booksBuffer = null;

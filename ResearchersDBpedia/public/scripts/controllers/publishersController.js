@@ -1,5 +1,5 @@
-﻿var app = angular.module('publishersModule', [])
-    .controller('publishersController', function ($scope, $http) {
+﻿var app = angular.module('dbpResearchModule')
+.controller('publishersController', function ($scope, $http) {
 	
 	$scope.publishers = null;
 	$scope.publisher = null;
