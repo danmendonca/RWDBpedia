@@ -31,14 +31,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
+    <Compile Include="public\scripts\controllers\homeController.js" />
     <Compile Include="public\scripts\controllers\authorsController.js" />
     <Compile Include="public\scripts\core.js" />
     <Compile Include="libs\SparqlQuery.js" />
     <Compile Include="public\scripts\controllers\booksController.js" />
+    <Compile Include="public\scripts\directives\HomeDirective.js" />
     <Compile Include="public\scripts\directives\AuthorsDirective.js" />
     <Compile Include="public\scripts\directives\BooksDirective.js" />
     <Compile Include="routes\articles.js" />
     <Compile Include="routes\authors.js" />
+    <Compile Include="routes\home.js" />
     <Compile Include="routes\books.js" />
     <Compile Include="routes\index.js" />
     <Compile Include="routes\publishers.js" />
@@ -49,6 +52,7 @@
     <Content Include="public\styles\style.styl" />
     <Content Include="public\views\authors.html" />
     <Content Include="public\views\book.html" />
+    <Content Include="public\views\home.html" />
     <Content Include="public\views\books.html" />
     <Content Include="public\views\magazine.html" />
     <Content Include="public\views\publisher.html" />

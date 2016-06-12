@@ -21,6 +21,9 @@
         </div>
     </nav>
 
+    <dbphome></dbphome>
+
+    <!--
     <div class="row" style="margin-top: 200px;">
         <div class="span4">
             <form>
@@ -31,19 +34,19 @@
                 </fieldset>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="optionsRadios" id="booksRadioButton" value="booksRadio" checked>
+                        <input type="radio" name="optionsRadios" ng-model="searchOptions.radio" id="booksRadioButton" value="booksRadio" checked>
                         Books
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="optionsRadios" id="authorsRadioButton" value="authorsRadio">
+                        <input type="radio" name="optionsRadios" ng-model="searchOptions.radio" id="authorsRadioButton" value="authorsRadio">
                         Authors
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="optionsRadios" id="publishersRadioButton" value="publishersRadio">
+                        <input type="radio" name="optionsRadios" ng-model="searchOptions.radio" id="publishersRadioButton" value="publishersRadio">
                         Publishers
                     </label>
                 </div>
@@ -51,12 +54,15 @@
             </form>
         </div>
     </div>
+    -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
     <script src="public/scripts/controllers/booksController.js"></script>
     <script src="public/scripts/directives/BooksDirective.js"></script>
     <script src="public/scripts/controllers/authorsController.js"></script>
     <script src="public/scripts/directives/AuthorsDirective.js"></script>
+    <script src="public/scripts/directives/HomeDirective.js"></script>
+    <script src="public/scripts/controllers/homeController.js"></script>
     <script src="public/scripts/core.js"></script>
 </body>
 </html>
