@@ -1,36 +1,66 @@
 ﻿var app = angular.module('booksModule', [])
 .controller('booksController', function ($scope, $http) {
 	
-	var books_buffer = null;
-	var book_by_isbn = null;
+	var booksBuffer = null;
+	var bookByIsbn = null;
+	$scope.listOfBooks = false;
+	$scope.singleBook = false;
 	
-	//TODO GET BY PARAM INPUT
-	$scope.findBySubject = function () {
-		$http.get('/book/subject/math').success(function (data) {
-			books_buffer = data;
-			$scope.books = books_buffer;
-		}).error(function () {
-			console.log("Ops: could not get any data");
-		});
+	var setBooksVisibility = function (isSingleBook, isListBooks) {
+		$scope.listOfBooks = isListBooks;
+		$scope.singleBook = isSingleBook;
 	}
 	
-	//TODO GET BY PARAM INPUT
+	$scope.findBySubject = function () {
+		if (!$scope.bookSubjectParam) return;
+		
+		var apiCall = "/book/subject/" + $scope.bookSubjectParam;
+		$http.get(apiCall)
+		.success(function (data) {
+			booksBuffer = data;
+			$scope.books = booksBuffer;
+			setBooksVisibility(false, true);
+		})
+		.error(function () {
+			console.log("Oops: could not get any data");
+		});
+	}
+	$scope.findBookByIsbn = function () {
+		if (!$scope.bookIsbnParam) return;
+		
+		var apiCall = "/book/isbn/" + $scope.bookIsbnParam;
+		$http.get(apiCall)
+		.success(function (data) {
+			bookByIsbn = data;
+			$scope.book = bookByIsbn;
+			setBooksVisibility(true, false);
+		})
+		.error(function () {
+			console.log("Oops: could not get any data");
+		});
+	}
+	//
+	//
+	//TESTS
+	//LIST OF BOOKS
+	
 	$http.get('/book/subject/artificial').success(function (data) {
 		
-		books_buffer = data;
-		$scope.books = books_buffer;
+		booksBuffer = data;
+		$scope.books = booksBuffer;
 
 	}).error(function () {
 		console.log("Ops: could not get any data");
 	});
-	
-	//TODO GET BY PARAM INPUT
+	//BOOK BY ISBN
+	/*
 	$http.get('/book/isbn/1000').success(function (data) {
 		
-		book_by_isbn = data;
-		$scope.book_by_isbn = book_by_isbn;
+		bookByIsbn = data;
+		$scope.book_by_isbn = bookByIsbn;
         
 	}).error(function () {
 		console.log("Ops: could not get any data");
 	});
+	*/
 });

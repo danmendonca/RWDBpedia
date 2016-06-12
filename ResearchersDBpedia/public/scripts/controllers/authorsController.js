@@ -34,7 +34,8 @@
 	//
 	//
 	//TESTING SECTION
-	$http.get("/authors/name/John")
+	//Testing list of authors
+	/* $http.get("/authors/name/John%20Gordon%20Lorimer")
 	.success(function (data) {
 		authorsBuffer = data;
 		$scope.IsAuthorsSingleView = false;
@@ -42,5 +43,5 @@
 	})
 	.error(function () {
 		console.log("Ops: could not get any data");
-	});
+	});*/
 });

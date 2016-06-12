@@ -1,19 +1,19 @@
-﻿var express = require('express');
+﻿//
+//
+//requires
+var express = require('express');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
-
 var SparqlQuery = require('../libs/SparqlQuery');
-var router = express.Router();
-
-//SPARQL config
 var request = require('request');
 var SparqlHttp = require('sparql-http-client');
+var router = express.Router();
+//SPARQL config
 SparqlHttp.request = SparqlHttp.requestModuleRequest(request);
 var endpoint = new SparqlHttp({ endpointUrl: 'http://dbpedia.org/sparql' });
-
-
-//============================= PREPARING SPARQL HEADER
-//here should be all the prefixes necessary for the books sparql queries
+//
+//
+//SPARQL
 addBookPrefixes = function (q) {
     q.addPrefix('PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>');
     q.appendPrefix('PREFIX dct: <http://purl.org/dc/terms/>');
@@ -23,8 +23,6 @@ addBookPrefixes = function (q) {
     q.appendPrefix('PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>');
 }
 
-
-//here should be all the triples for the standard book information we need
 addBookTriples = function (q) {
     q.addTriple('?book rdf:type dbo:Book .'); //book IRI
     q.appendTriple('?book dbp:name ?b_title .'); //title
@@ -39,8 +37,6 @@ addBookTriples = function (q) {
 
 }
 
-
-//here should be all the information related that we will need the query to retrieve
 addSelectSampleParams = function (q) {
     var selectParam = "SELECT DISTINCT (SAMPLE(?b_title) AS ?title)"
     + " (SAMPLE(?b_author) AS ?author) (SAMPLE(?b_abs) AS ?abstract)"
@@ -49,13 +45,11 @@ addSelectSampleParams = function (q) {
     q.addSelect(selectParam);
 }
 
-
 appendLangFilters = function (q){
     q.appendWhereFilterAnd('LANG(?b_title) = "en"');
     q.appendWhereFilterAnd('LANG(?b_abs) = "en"');
     q.appendWhereFilterAnd('LANG(?b_desc) = "en"');
 }
-
 
 prepareStandardQuery = function (q){
     addBookPrefixes(q);
@@ -63,8 +57,6 @@ prepareStandardQuery = function (q){
     addBookTriples(q);
 }
 
-
-//============================= SETTING OBJ COMMON FIELDS
 setObjProperties = function (obj, entry) {
     obj.title = entry.title.value;
     obj.abstract = entry.abstract.value;
@@ -73,24 +65,9 @@ setObjProperties = function (obj, entry) {
     obj.publisher = entry.publisher.value;
     obj.nfs = entry.nfs.value;
 };
-
-
-
-
-//============================= ANSWERING GET REQUESTS
-/* GET users listing. */
-router.get('/', function (req, res) {
-    res.send('Nothing to see here!');
-});
-
-
-
-
-/**
- * 
- * one book queries
- * 
- */ 
+//
+//
+//routes
 router.get('/isbn/:isbn', function (req, res) {
     var q = new SparqlQuery();
     prepareStandardQuery(q);
@@ -124,19 +101,11 @@ router.get('/isbn/:isbn', function (req, res) {
     });
 });
 
-
 router.get('/bookiri/:iri', function (req, res) {
     res.send("Not implemented");
 });
 
-
-
-
-/**
- * 
- * multiple books queries
- * 
- */ 
+//books with nfs sub
 router.get('/subject/:sub', function (req, res) {
     var q = new SparqlQuery();
     prepareStandardQuery(q);
@@ -167,7 +136,7 @@ router.get('/subject/:sub', function (req, res) {
     });
 });
 
-
+//books with a nfs from publisher pub
 router.get('/publisher/:pub', function (req, res) {
     var q = new SparqlQuery();
     prepareStandardQuery(q);
@@ -188,7 +157,7 @@ router.get('/publisher/:pub', function (req, res) {
     });
 });
 
-
+//books from author author
 router.get('/author/:author', function (req, res) {
     var q = new SparqlQuery();
     prepareStandardQuery(q);

@@ -92,10 +92,6 @@ router.get('/name/:name', function(req, res) {
     });
 
 });
-
-
-//url / escapechar = %2F
-//encodeURI(uri)
 router.get('/iri/:iri', function (req, res) {
    // var test_iri = encodeURIComponent('http://dbpedia.org/resource/Nava_Macmel-Atir');
     var q = new SparqlQuery();

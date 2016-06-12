@@ -41,6 +41,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/book', books);
 app.use('/authors', authors);
+app.use("/publisher", publishers);
 
 
 //application ===========================
