@@ -72,10 +72,12 @@
 	$scope.setBook = function(book) {
 		$scope.data.book = book;
 		$scope.data.singleBook = true;
+		$scope.data.listOfBooks = false;
 	}
 
 	$scope.unsetBook = function() {
-	    $scope.data.singleBook = false;
+		$scope.data.singleBook = false;
+		$scope.data.listOfBooks = true;
 	}
 	
 
