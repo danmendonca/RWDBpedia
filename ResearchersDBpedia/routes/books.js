@@ -41,8 +41,7 @@ addSelectSampleParams = function (q) {
     var selectParam = "SELECT DISTINCT (SAMPLE(?b_title) AS ?title)"
     + " (SAMPLE(?b_author) AS ?author) (SAMPLE(?b_abs) AS ?abstract)"
     + " (SAMPLE(?b_desc) AS ?description) (SAMPLE(?b_publisher) AS ?publisher) "
-    + " (SAMPLE(?b_nfs) AS ?nfs)";
-	// +" (SAMPLE(?b_wikiID) AS ?wikiID)";
+    + " (SAMPLE(?b_nfs) AS ?nfs) (SAMPLE(?b_wikiID) AS ?wikiID)";
     q.addSelect(selectParam);
 }
 
@@ -65,7 +64,7 @@ setObjProperties = function (obj, entry) {
     obj.description = entry.description.value;
     obj.publisher = entry.publisher.value;
 	obj.nfs = entry.nfs.value;
-	// obj.wikiID = entry.wikiID.value;
+	obj.wikiID = entry.wikiID.value;
 };
 //
 //
@@ -128,8 +127,6 @@ router.get('/subject/:sub', function (req, res) {
     );
     appendLangFilters(q);
 	var queryAuto = q.returnQuery() + "GROUP BY ?book";
-	
-	console.log("\n\nmultiple book query:\n" + queryAuto);
 
     endpoint.selectQuery(queryAuto, function (error, response) {
         var jsonAns = JSON.parse(response.body).results.bindings;
@@ -152,8 +149,6 @@ router.get('/publisher/:pub', function (req, res) {
     appendLangFilters(q);
 
 	var queryString = q.returnQuery() + " GROUP BY ?book";
-	
-	console.log("\n\npublisher query:\n" + queryAuto);
 
     endpoint.selectQuery(queryString, function (error, response) {
         var jsonAns = JSON.parse(response.body).results.bindings;
@@ -177,8 +172,6 @@ router.get('/author/:author', function (req, res) {
     appendLangFilters(q);
     
 	var queryString = q.returnQuery() + " GROUP BY ?book";
-	
-	console.log("\n\nauthor query:\n" + queryAuto);
 
     endpoint.selectQuery(queryString, function (error, response) {
         var jsonAns = JSON.parse(response.body).results.bindings;
