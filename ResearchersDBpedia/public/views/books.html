@@ -24,14 +24,15 @@
                             </tr>
                             <tr>
                                 <td>Publisher</td>
-                                <td>{{data.book.publisher}}</td>
+                                <td ng-click="goToPublisher()">{{data.book.publisher}}</td>
+                                <td><button ng-click="goToPublisher()" value="morePublisher">More</button></td>
                             </tr>
                             <tr>
                                 <td>Subject</td>
                                 <td>{{data.book.nfs}}</td>
                             </tr>
                             <tr>
-                                <td colspan="2"><button ng-click="unsetBook()" value="hide">Hide</button></td>
+                                <td colspan="3"><button ng-click="unsetBook()" value="hide">Hide</button></td>
                             </tr>
                         </table>
                         <p>

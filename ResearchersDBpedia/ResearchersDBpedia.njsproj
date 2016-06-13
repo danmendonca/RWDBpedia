@@ -57,7 +57,6 @@
     <Content Include="public\views\books.html" />
     <Content Include="public\views\magazine.html" />
     <Content Include="public\views\publishers.html" />
-    <Content Include="public\views\publisher.html" />
     <Content Include="README.md" />
     <Content Include="views\index.jade" />
     <Content Include="views\layout.jade" />

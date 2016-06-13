@@ -26,12 +26,12 @@ addBookPrefixes = function (q) {
 addBookTriples = function (q) {
 	q.addTriple('?book rdf:type dbo:Book .'); //book IRI
 	q.appendTriple('?book dbp:name ?b_title .'); //title
-	q.appendTriple('?book dbp:author ?b_author_tmp .');
-	q.appendTriple('?b_author_tmp dbp:name ?b_author .'); //author
+	q.appendTriple('?book dbp:author ?b_author_iri .');
+	q.appendTriple('?b_author_iri dbp:name ?b_author .'); //author
 	q.appendTriple('?book dbo:abstract ?b_abs .'); //abstract
 	q.appendTriple('?book rdfs:comment ?b_desc .'); //description
-	q.appendTriple('?book dbp:publisher ?b_publisher_tmp .');
-	q.appendTriple('?b_publisher_tmp rdfs:label ?b_publisher .'); //publisher
+	q.appendTriple('?book dbp:publisher ?b_publisher_iri .');
+	q.appendTriple('?b_publisher_iri rdfs:label ?b_publisher .'); //publisher
 	q.appendTriple('?book dbo:nonFictionSubject ?b_nfs_tmp .');
 	q.appendTriple('?b_nfs_tmp rdfs:label ?b_nfs .'); //non-fiction-subject
 	q.appendTriple('?book dbo:wikiPageID ?b_wikiID .'); // wiki page ID
@@ -43,7 +43,8 @@ addSelectSampleParams = function (q) {
     + " (SAMPLE(?b_author) AS ?author) (SAMPLE(?b_abs) AS ?abstract)" 
     + " (SAMPLE(?b_desc) AS ?description) (SAMPLE(?b_publisher) AS ?publisher) " 
     + " (SAMPLE(?b_nfs) AS ?nfs) (SAMPLE(?b_wikiID) AS ?wikiID)"
-	+ " (SAMPLE(?b_isbn) AS ?isbn)";
+	+ " (SAMPLE(?b_isbn) AS ?isbn) (SAMPLE(?b_publisher_iri) AS ?publisherIri)"
+	+ " (SAMPLE(?b_author_iri) AS ?authorIri)";
 	q.addSelect(selectParam);
 }
 
@@ -67,7 +68,9 @@ setObjProperties = function (obj, entry) {
 	obj.publisher = entry.publisher.value;
 	obj.nfs = entry.nfs.value;
 	obj.wikiID = entry.wikiID.value;
-    obj.isbn = entry.isbn.value;
+	obj.isbn = entry.isbn.value;
+	obj.authorIri = entry.authorIri.value;
+    obj.publisherIri = entry.publisherIri.value;
 };
 //
 //

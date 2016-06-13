@@ -86,8 +86,8 @@ router.get("/iri/:pub", function (req, res) {
 	var q = new SparqlQuery();
 	preparePublisherQuery(q);
 	
-	q.addWhereFilter('contains(lcase(?b_publisher), "' + req.params.pub.toLowerCase() + '" )');
-	appendLangFilters(q);
+	q.addWhereFilter('contains(str(?b_publisher_iri), "' + req.params.pub + '" )');
+	appendPublisherLangFilters(q);
 	
 	var queryString = q.returnQuery() + " GROUP BY ?book";
 	endpoint.selectQuery(queryString, function (error, response) {

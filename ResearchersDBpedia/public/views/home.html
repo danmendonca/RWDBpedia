@@ -11,21 +11,21 @@
             <button type="submit" class="btn btn-primary" ng-click="updateUi()">Search</button>
             <div class="radio">
                 <label>
-                    <input type="radio" name="optionsRadios" ng-model="radio" id="books" value="books" checked="">
+                    <input type="radio" name="optionsRadios" ng-model="data.radio" id="books" value="books" checked="">
                     <!-- TODO corrigir ng-model -->
                     Books
                 </label>
             </div>
             <div class="radio">
                 <label>
-                    <input type="radio" name="optionsRadios" ng-model="radio" id="authors" value="authors">
+                    <input type="radio" name="optionsRadios" ng-model="data.radio" id="authors" value="authors">
                     <!-- TODO corrigir ng-model -->
                     Authors
                 </label>
             </div>
             <div class="radio">
                 <label>
-                    <input type="radio" name="optionsRadios" ng-model="radio" id="publishers" value="publishers">
+                    <input type="radio" name="optionsRadios" ng-model="data.radio" id="publishers" value="publishers">
                     <!-- TODO corrigir ng-model -->
                     Publishers
                 </label>
@@ -33,9 +33,9 @@
         </div>
     </div>
 
-    <dbpauthors ng-show="radio == 'authors'"></dbpauthors>
-    <dbpbooks ng-show="radio == 'books'"></dbpbooks>
-    <dbppublishers ng-show="radio == 'publishers'"></dbppublishers>
+    <dbpauthors ng-show="data.radio == 'authors'"></dbpauthors>
+    <dbpbooks ng-show="data.radio == 'books'"></dbpbooks>
+    <dbppublishers ng-show="data.radio == 'publishers'"></dbppublishers>
 
 
 </section>

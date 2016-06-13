@@ -35,8 +35,7 @@
 		var apiCall = "/publisher/iri/" + $scope.publisherNameParam;
 		$http.get(apiCall)
 	        .success(function (data) {
-			$scope.publisher = data;
-			setViewsDisplay(true, false);
+			$scope.data.publishers = data;
 		})
 			.error(function () {
 			console.log("publishersController-findBublisherByIri: Oops, something went wrong.");
