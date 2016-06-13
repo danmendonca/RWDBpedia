@@ -17,6 +17,7 @@
                             <tr>
                                 <td>Author</td>
                                 <td>{{data.book.author}}</td>
+                                <td><button ng-click="goToAuthor()" value="moreAuthor">More</button></td>
                             </tr>
                             <tr ng-if="entry.isbn.indexOf('ISBN') !== -1">
                                 <td>ISBN</td>

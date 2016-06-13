@@ -26,7 +26,7 @@ addAuthorPrefixes = function (q) {
 
 addAuthorSelectParams = function (q) {
     var selectParam = "SELECT distinct ?author (SAMPLE(?birthName) as ?birthName)"
-    + " (SAMPLE(?nationality) as ?nationality)(SAMPLE(?birthDate) as ?birthDate)"
+    + " (SAMPLE(?birthDate) as ?birthDate)"
     + " (SAMPLE(?occupation) as ?occupation)(SAMPLE(?birthPlace) as ?birthPlace) ";
     q.addSelect(selectParam);
 }
@@ -34,18 +34,18 @@ addAuthorSelectParams = function (q) {
 
 appendAuthorTriples = function (q) {
     q.appendTriple('?author dbp:name ?birthName .');
-    q.appendTriple('?author dbp:nationality ?nationalityIRI .');
-    q.appendTriple('?nationalityIRI rdfs:label ?nationality .');
+    //q.appendTriple('?author dbp:nationality ?nationalityIRI .');
+    //q.appendTriple('?nationalityIRI rdfs:label ?nationality .');
     q.appendTriple('?author dbp:birthDate ?birthDate .');
     q.appendTriple('?author dbp:occupation ?occupationIRI .');
     q.appendTriple('?occupationIRI rdfs:label ?occupation .');
-    q.appendTriple('?author dbp:birthPlace ?birthPlaceIRI .');
-    q.appendTriple('?birthPlaceIRI rdfs:label ?birthPlace .');
+    q.appendTriple('?author dbp:birthPlace ?birthPlace .');
+    //q.appendTriple('?birthPlaceIRI rdfs:label ?birthPlace .');
 }
 
 
 appendAuthorLangFilters = function (q) {
-    q.appendWhereFilterAnd('LANG(?nationality) = "en"');
+    //q.appendWhereFilterAnd('LANG(?nationality) = "en"');
     q.appendWhereFilterAnd('LANG(?birthName) = "en"');
     q.appendWhereFilterAnd('LANG(?occupation) = "en"');
     q.appendWhereFilterAnd('LANG(?birthPlace) = "en"');
@@ -55,7 +55,7 @@ appendAuthorLangFilters = function (q) {
 setAuthorObjProperties = function (obj, entry) {
     obj.author = entry.author.value;
     obj.birthName = entry.birthName.value;
-    obj.nationality = entry.nationality.value;
+    //obj.nationality = entry.nationality.value;
     obj.birthDate = entry.birthDate.value;
     obj.occupation = entry.occupation.value;
     obj.birthPlace = entry.birthPlace.value;

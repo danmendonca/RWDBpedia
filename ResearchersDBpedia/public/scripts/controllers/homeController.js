@@ -114,7 +114,11 @@
 	var goToPublisherByName = function () {
 		$scope.data.queryParam = $scope.data.book.publisher;
 		searchPublisherByName();
-
+	}
+	
+	var goToAuthorByName = function () {
+		$scope.data.queryParam = $scope.data.book.author;
+		//searchPublisherByName();
 	}
 	
 	$scope.goToPublisher = function () {
@@ -132,6 +136,23 @@
 			.error(function (err) {
 			console.log(err);
 			console.log("publishersController-findBublisherByIri: Oops, something went wrong.");
+		});
+	}
+
+	$scope.goToAuthor = function () {
+		
+		var apiCall = "/authors/iri/" + encodeURIComponent($scope.data.book.authorIri);
+		$http.get(apiCall)
+	        .success(function (data) {
+			if (data.length > 0) {
+				$scope.data.author = data[0];
+				$scope.data.singleAuthor = true;
+				$scope.data.listOfAuthors = false;
+				$scope.data.radio = "authors";
+			} else goToAuthorByName();
+		})
+			.error(function (err) {
+			console.log(err);
 		});
 	}
 	

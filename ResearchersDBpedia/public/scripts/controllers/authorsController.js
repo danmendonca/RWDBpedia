@@ -1,9 +1,8 @@
 ﻿var app = angular.module('dbpResearchModule')
 .controller('authorsController', function ($scope, $http, MyData) {
 	$scope.data = MyData.data;
-	var authorsBuffer = null;
-	var authorByIri = null;
-	$scope.IsSingleView = false;
+	$scope.data.author = null;
+	$scope.data.authors = null;
 	//
 	//
 	//setting variables
@@ -13,9 +12,7 @@
 		
 		$http.get(apiCall)
 		.success(function (data) {
-			authorsBuffer = data;
-			$scope.authors = authorsBuffer;
-			$scope.IsAuthorsSingleView = false;
+			$scope.authors = data;
 		}).error(function () { console.log("Oops: could not get any data"); });
 	}
 	
@@ -25,9 +22,7 @@
 		var apiCall = "/authors/iri/" + $scope.data.queryParam;
 		$http.get(apiCall)
 		.success(function (data) {
-			authorByIri = data;
-			$scope.author = authorByIri;
-			$scope.IsAuthorsSingleView = true;
+			$scope.author = data;
 		})
 		.error(function () { console.log("Oops: could not get any data"); });
 	}

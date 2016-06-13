@@ -1,6 +1,6 @@
 ﻿<section id="author_section" ng-controller="authorsController">
 
-    <div class="panel panel-primary" ng-if="data.singleAuthors">
+    <div class="panel panel-primary" ng-if="data.singleAuthor">
         <div class="panel-heading">Author</div>
         <div class="panel-body">
 
@@ -9,13 +9,8 @@
                     <img src="http://placehold.it/400x300" class="pull-right" alt="">
                     <div class="caption">
                         <h3>{{data.author.birthName}}</h3>
-                        <p>Scientist?</p>
 
                         <table class="table">
-                            <tr>
-                                <td>Nationality</td>
-                                <td>{{data.author.nationality}}</td>
-                            </tr>
                             <tr>
                                 <td>Birth Place</td>
                                 <td>{{data.author.birthPlace}}</td>

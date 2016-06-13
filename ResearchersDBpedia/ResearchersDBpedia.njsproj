@@ -52,7 +52,6 @@
     <Content Include="public\index.html" />
     <Content Include="public\styles\style.styl" />
     <Content Include="public\views\authors.html" />
-    <Content Include="public\views\book.html" />
     <Content Include="public\views\home.html" />
     <Content Include="public\views\books.html" />
     <Content Include="public\views\magazine.html" />
