@@ -22,11 +22,16 @@
                                 <td>occupation</td>
                                 <td>{{data.author.occupation}}</td>
                             </tr>
-                        </table>
+                            <tr>
+                                <td>
+                                    <a href="#" class="btn btn-default" ng-click="getAuthorBooks()">Author books</a>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-default" ng-click="unsetAuthor()">Back</a>
+                                </td>
+                            </tr>
 
-                        <p>
-                            <a href="#" class="btn btn-default" ng-click="getAuthorBooks()">Author books</a>
-                        </p>
+                        </table>
 
                     </div>
                 </div>
@@ -94,10 +99,13 @@
                                 <td>occupation</td>
                                 <td>{{entry.occupation}}</td>
                             </tr>
+                            <tr>
+                                <td><a href="#" class="btn btn-default" ng-click="setAuthor(entry)">Highlight</a></td>
+                            </tr>
                         </table>
 
                         <p>
-                            <a href="#" class="btn btn-default">Highlight</a>
+                            
                         </p>
 
                     </div>

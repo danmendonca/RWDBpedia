@@ -53,7 +53,7 @@ appendAuthorLangFilters = function (q) {
 
 
 setAuthorObjProperties = function (obj, entry) {
-    obj.author = entry.author.value;
+    obj.iri = entry.author.value;
     obj.birthName = entry.birthName.value;
     //obj.nationality = entry.nationality.value;
     obj.birthDate = entry.birthDate.value;

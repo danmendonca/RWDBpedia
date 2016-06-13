@@ -16,6 +16,8 @@
 	$scope.data.singleAuthor = false;
 	$scope.data.listOfAuthors = false;
 	
+	$scope.data.check = false;
+	
 	var setBooksVisibility = function (isSingleBook, isListBooks) {
 		$scope.data.listOfBooks = isListBooks;
 		$scope.data.singleBook = isSingleBook;
@@ -30,10 +32,12 @@
 		
 		$http.get(apiCall)
 		.success(function (data) {
-			data.unsetAuthor();
+			$scope.unsetAuthor();
 			$scope.data.authors = data;
-			$scope.data.IsAuthorsSingleView = false;
-		}).error(function () { console.log("Oops: could not get any data"); });
+		})
+		.error(function () {
+			console.log("Oops: could not get any data");
+		});
 	}
 	
 	var searchPublisherByName = function () {
@@ -59,8 +63,11 @@
 			console.log("Books search empty param.");
 			return;
 		}
-		
-		var apiCall = "/book/subject/" + $scope.data.queryParam;
+
+		var apiCall = "/book/subject/";
+	    if (!$scope.data.check) apiCall += $scope.data.queryParam;
+		else apiCall += "all/" + $scope.data.queryParam;
+
 		$http.get(apiCall)
 		.success(function (data) {
 			$scope.data.books = data;
@@ -128,7 +135,7 @@
 	        .success(function (data) {
 			if (data.length > 0) {
 				$scope.data.publisher = data[0];
-			    $scope.data.publisher.iri = $scope.data.book.publisherIri;
+				$scope.data.publisher.iri = $scope.data.book.publisherIri;
 				$scope.data.singlePublisher = true;
 				$scope.data.listOfPublishers = false;
 				$scope.data.radio = "publishers";
@@ -139,7 +146,7 @@
 			console.log("publishersController-findBublisherByIri: Oops, something went wrong.");
 		});
 	}
-
+	
 	$scope.goToAuthor = function () {
 		
 		var apiCall = "/authors/iri/" + encodeURIComponent($scope.data.book.authorIri);
@@ -147,7 +154,6 @@
 	        .success(function (data) {
 			if (data.length > 0) {
 				$scope.data.author = data[0];
-			    $scope.data.author.iri = $scope.data.book.authorIri;
 				$scope.data.singleAuthor = true;
 				$scope.data.listOfAuthors = false;
 				$scope.data.radio = "authors";
@@ -157,21 +163,27 @@
 			console.log(err);
 		});
 	}
+	
+	$scope.getPublisherBooks = function () {
+		var apiCall = "/book/publisheriri/";
+		if (!$scope.data.check) apiCall +=  encodeURIComponent($scope.publisher.iri);
+		else apiCall += "all/" +  encodeURIComponent($scope.data.publisher.iri);
 
-	$scope.getPublisherBooks = function() {
-		var apiCall = "/book/publisheriri/" + encodeURIComponent($scope.data.publisher.iri);
 		$http.get(apiCall)
 	        .success(function (data) {
-				$scope.data.publisher.books = data;
+			$scope.data.publisher.books = data;
 		})
 			.error(function (err) {
 			console.log(err);
 		});
 	}
 	
-
+	
 	$scope.getAuthorBooks = function () {
-		var apiCall = "/book/authoriri/" + encodeURIComponent($scope.data.author.iri);
+		var apiCall = "/book/authoriri/";//all/" + encodeURIComponent($scope.data.author.iri);
+		if (!$scope.data.check) apiCall +=  encodeURIComponent($scope.data.author.iri);
+		else apiCall += "all/" +  encodeURIComponent($scope.data.author.iri);
+
 		$http.get(apiCall)
 	        .success(function (data) {
 			$scope.data.author.books = data;
