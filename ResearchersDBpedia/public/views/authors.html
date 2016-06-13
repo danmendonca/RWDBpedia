@@ -36,6 +36,45 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div ng-repeat="entry in data.books">
+                    <div class="clearfix" ng-if="$index % 4 == 0"></div>
+                    <div class="col-sm-3">
+                        <div class="thumbnail">
+                            <img ng-if="entry.isbn.indexOf('ISBN') !== -1"
+                                 src="http://covers.openlibrary.org/b/isbn/{{entry.isbn.substring(5,entry.isbn.length)}}-M.jpg " alt="">
+                            <div class="caption">
+                                <h3>{{entry.title}}</h3>
+                                <p>{{entry.description}}</p>
+
+                                <table class="table">
+                                    <tr>
+                                        <td>Author</td>
+                                        <td>{{entry.author}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Publisher</td>
+                                        <td>{{entry.publisher}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Subject</td>
+                                        <td>{{entry.nfs}}</td>
+                                    </tr>
+                                    <tr ng-if="entry.isbn.indexOf('ISBN') !== -1">
+                                        <td>ISBN</td>
+                                        <td>{{entry.isbn.substring(5,entry.isbn.length)}}</td> <!-- clean isbn-->
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><button ng-click="setBook(entry)" value="hide">Highlight</button></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
