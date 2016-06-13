@@ -13,6 +13,9 @@
 	$scope.data.listOfPublishers = false;
 	$scope.data.singlePublisher = false;
 	
+	$scope.data.singleAuthor = false;
+	$scope.data.listOfAuthors = false;
+	
 	var setBooksVisibility = function (isSingleBook, isListBooks) {
 		$scope.data.listOfBooks = isListBooks;
 		$scope.data.singleBook = isSingleBook;
@@ -27,6 +30,7 @@
 		
 		$http.get(apiCall)
 		.success(function (data) {
+			data.unsetAuthor();
 			$scope.data.authors = data;
 			$scope.data.IsAuthorsSingleView = false;
 		}).error(function () { console.log("Oops: could not get any data"); });
@@ -83,6 +87,28 @@
 	$scope.unsetBook = function () {
 		$scope.data.singleBook = false;
 		$scope.data.listOfBooks = true;
+	}
+	
+	$scope.setPublisher = function (publisher) {
+		$scope.data.publisher = publisher;
+		$scope.data.singlePublisher = true;
+		$scope.data.listOfPublishers = false;
+	}
+	
+	$scope.unsetPublisher = function () {
+		$scope.data.singlePublisher = false;
+		$scope.data.listOfPublishers = true;
+	}
+	
+	$scope.setAuthor = function (author) {
+		$scope.data.author = author;
+		$scope.data.singleAuthor = true;
+		$scope.data.listOfAuthors = false;
+	}
+	
+	$scope.unsetAuthor = function () {
+		$scope.data.singleAuthor = false;
+		$scope.data.listOfAuthors = true;
 	}
 	
 	var goToPublisherByName = function () {
