@@ -89,6 +89,7 @@
 		$scope.data.book = book;
 		$scope.data.singleBook = true;
 		$scope.data.listOfBooks = false;
+		$scope.data.radio = "books";
 	}
 	
 	$scope.unsetBook = function () {
@@ -100,6 +101,7 @@
 		$scope.data.publisher = publisher;
 		$scope.data.singlePublisher = true;
 		$scope.data.listOfPublishers = false;
+		$scope.data.radio = "publishers";
 	}
 	
 	$scope.unsetPublisher = function () {
@@ -111,6 +113,7 @@
 		$scope.data.author = author;
 		$scope.data.singleAuthor = true;
 		$scope.data.listOfAuthors = false;
+		$scope.data.radio = "authors";
 	}
 	
 	$scope.unsetAuthor = function () {
@@ -125,7 +128,6 @@
 	
 	var goToAuthorByName = function () {
 		$scope.data.queryParam = $scope.data.book.author;
-		//searchPublisherByName();
 	}
 	
 	$scope.goToPublisher = function () {
