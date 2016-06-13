@@ -128,6 +128,7 @@
 	        .success(function (data) {
 			if (data.length > 0) {
 				$scope.data.publisher = data[0];
+			    $scope.data.publisher.iri = $scope.data.book.publisherIri;
 				$scope.data.singlePublisher = true;
 				$scope.data.listOfPublishers = false;
 				$scope.data.radio = "publishers";
@@ -146,6 +147,7 @@
 	        .success(function (data) {
 			if (data.length > 0) {
 				$scope.data.author = data[0];
+			    $scope.data.author.iri = $scope.data.book.authorIri;
 				$scope.data.singleAuthor = true;
 				$scope.data.listOfAuthors = false;
 				$scope.data.radio = "authors";
@@ -155,6 +157,28 @@
 			console.log(err);
 		});
 	}
+
+	$scope.getPublisherBooks = function() {
+		var apiCall = "/book/publisheriri/" + encodeURIComponent($scope.data.publisher.iri);
+		$http.get(apiCall)
+	        .success(function (data) {
+				$scope.data.publisher.books = data;
+		})
+			.error(function (err) {
+			console.log(err);
+		});
+	}
 	
+
+	$scope.getAuthorBooks = function () {
+		var apiCall = "/book/authoriri/" + encodeURIComponent($scope.data.author.iri);
+		$http.get(apiCall)
+	        .success(function (data) {
+			$scope.data.author.books = data;
+		})
+			.error(function (err) {
+			console.log(err);
+		});
+	}
 
 });

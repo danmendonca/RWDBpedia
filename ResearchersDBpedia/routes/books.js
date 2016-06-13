@@ -79,10 +79,6 @@ router.get('/isbn/:isbn', function (req, res) {
 	var q = new SparqlQuery();
 	prepareStandardQuery(q);
 	
-	//curiosity --TODO delete maybe?!
-	q.appendTriple('?book dct:subject ?b_sbj .');
-	q.appendTriple('?book dbp:genre ?b_genre .');
-	
 	q.addWhereFilter(
 		'(contains(lcase(str(?b_isbn)), "' + req.params.isbn.toLowerCase() + '") )' 
 	);
@@ -105,10 +101,6 @@ router.get('/isbn/:isbn', function (req, res) {
 		res.setHeader('Content-Type', 'application/json');
 		res.send(JSON.stringify(jsAns));
 	});
-});
-
-router.get('/bookiri/:iri', function (req, res) {
-	res.send("Not implemented");
 });
 
 //books with nfs sub
@@ -142,7 +134,31 @@ router.get('/subject/:sub', function (req, res) {
 	});
 });
 
-//books with a nfs from publisher pub
+
+router.get('/author/:author', function (req, res) {
+	var q = new SparqlQuery();
+	addBookPrefixes(q);
+	addBookTriples(q);
+	prepareStandardQuery(q);
+	
+	q.addWhereFilter('CONTAINS(LCASE(STR(?b_author)), "' 
+        + req.params.author.toLowerCase() + '" )');
+	appendLangFilters(q);
+	
+	var queryString = q.returnQuery() + " GROUP BY ?book";
+	
+	endpoint.selectQuery(queryString, function (error, response) {
+		var jsonAns = JSON.parse(response.body).results.bindings;
+		var jsAns = [];
+		jsonAns.forEach(function (entry) {
+			var obj = new Object();
+			setObjProperties(obj, entry);
+			jsAns.push(obj);
+		});
+		res.send(JSON.stringify(jsAns));
+	});
+});
+
 router.get('/publisher/:pub', function (req, res) {
 	var q = new SparqlQuery();
 	prepareStandardQuery(q);
@@ -164,13 +180,12 @@ router.get('/publisher/:pub', function (req, res) {
 	});
 });
 
-//books from author author
-router.get('/author/:author', function (req, res) {
+
+router.get('/authoriri/:author', function (req, res) {
 	var q = new SparqlQuery();
 	prepareStandardQuery(q);
 	
-	q.addWhereFilter('CONTAINS(LCASE(STR(?b_author)), "' 
-        + req.params.author.toLowerCase() + '" )');
+	q.addWhereFilter("(?b_author_iri = <" + req.params.author + ">)");
 	appendLangFilters(q);
 	
 	var queryString = q.returnQuery() + " GROUP BY ?book";
@@ -187,14 +202,24 @@ router.get('/author/:author', function (req, res) {
 	});
 });
 
-
-router.get('/authoriri/:author', function (req, res) {
-	res.send("Not implemented");
-});
-
-
-router.get('/publisherriri/:pub', function (req, res) {
-	res.send("Not implemented");
+router.get('/publisheriri/:pub', function (req, res) {
+	var q = new SparqlQuery();
+	prepareStandardQuery(q);
+    q.addWhereFilter("(?b_publisher_iri=<" + req.params.pub + ">)");
+	appendLangFilters(q);
+	
+	var queryString = q.returnQuery() + " GROUP BY ?book";
+	
+	endpoint.selectQuery(queryString, function (error, response) {
+		var jsonAns = JSON.parse(response.body).results.bindings;
+		var jsAns = [];
+		jsonAns.forEach(function (entry) {
+			var obj = new Object();
+			setObjProperties(obj, entry);
+			jsAns.push(obj);
+		});
+		res.send(JSON.stringify(jsAns));
+	});
 });
 
 module.exports = router;

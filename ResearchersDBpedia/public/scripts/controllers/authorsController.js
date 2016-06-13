@@ -26,17 +26,4 @@
 		})
 		.error(function () { console.log("Oops: could not get any data"); });
 	}
-	//
-	//
-	//TESTING SECTION
-	//Testing list of authors
-	/* $http.get("/authors/name/John%20Gordon%20Lorimer")
-	.success(function (data) {
-		authorsBuffer = data;
-		$scope.IsAuthorsSingleView = false;
-		$scope.authors = authorsBuffer;
-	})
-	.error(function () {
-		console.log("Ops: could not get any data");
-	});*/
 });

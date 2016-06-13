@@ -21,7 +21,7 @@
                         </table>
 
                         <p>
-                            <a href="#" class="btn btn-primary">Link to amazon!</a> <a href="#" class="btn btn-default">Published books</a>
+                            <a href="#" class="btn btn-default" ng-click="getPublisherBooks()">Published books</a>
                         </p>
 
                     </div>
@@ -29,7 +29,7 @@
             </div>
 
             <div class="row">
-                <div ng-repeat="entry in data.books">
+                <div ng-repeat="entry in data.publisher.books">
                     <div class="clearfix" ng-if="$index % 4 == 0"></div>
                     <div class="col-sm-3">
                         <div class="thumbnail">
@@ -56,9 +56,9 @@
                                         <td>ISBN</td>
                                         <td>{{entry.isbn.substring(5,entry.isbn.length)}}</td> <!-- clean isbn-->
                                     </tr>
-                                    <tr>
+                                    <!--<tr>
                                         <td colspan="2"><button ng-click="setBook(entry)" value="hide">Highlight</button></td>
-                                    </tr>
+                                    </tr>-->
                                 </table>
                             </div>
                         </div>
@@ -75,7 +75,6 @@
 
             <div class="col-md-8 col-sm-6 hero-feature" ng-repeat="entry in data.publishers">
                 <div class="thumbnail">
-                    <img src="http://placehold.it/400x300" alt="">
                     <div class="caption">
                         <h3>{{entry.publisher}}</h3>
 
